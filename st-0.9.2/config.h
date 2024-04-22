@@ -5,7 +5,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "IBM 3270:pixelsize=12:antialias=true:autohint=true";
+static char *font = "IBM 3270:pixelsize=16:antialias=true:autohint=true";
 static int borderpx = 2;
 
 /*
@@ -92,6 +92,9 @@ char *termname = "st-256color";
  *	stty tabs
  */
 unsigned int tabspaces = 8;
+
+/* bg opacity */
+float alpha = 0.8;
 
 /* Terminal colors (16 first used in escape sequence) */
 static const char *colorname[] = {
@@ -184,16 +187,16 @@ static MouseShortcut mshortcuts[] = {
 };
 
 /* Internal keyboard shortcuts. */
-#define MODKEY Mod4Mask
+#define MODKEY Mod1Mask
 #define TERMMOD (ControlMask|ShiftMask)
 
 static Shortcut shortcuts[] = {
 	/* mask                 keysym          function        argument */
 	{ XK_ANY_MOD,           XK_Break,       sendbreak,      {.i =  0} },
 	{ ControlMask,          XK_Print,       toggleprinter,  {.i =  0} },
-    { ShiftMask,            XK_Print,       printscreen,    {.i =  0} },
-    { XK_ANY_MOD,           XK_Print,       printsel,       {.i =  0} },
-    { TERMMOD,              XK_Prior,       zoom,           {.f = +1} },
+	{ ShiftMask,            XK_Print,       printscreen,    {.i =  0} },
+	{ XK_ANY_MOD,           XK_Print,       printsel,       {.i =  0} },
+	{ TERMMOD,              XK_Prior,       zoom,           {.f = +1} },
 	{ TERMMOD,              XK_Next,        zoom,           {.f = -1} },
 	{ TERMMOD,              XK_Home,        zoomreset,      {.f =  0} },
 	{ TERMMOD,              XK_C,           clipcopy,       {.i =  0} },
