@@ -1,0 +1,10 @@
+#!/bin/bash
+
+choice=$(echo -e "Shutdown\nReboot\nLogout" | dmenu -p "Select an action:")
+
+case "$choice" in
+    "Shutdown") systemctl poweroff ;;
+    "Reboot") systemctl reboot ;;
+    "Logout") loginctl terminate-user $USER ;;
+esac
+

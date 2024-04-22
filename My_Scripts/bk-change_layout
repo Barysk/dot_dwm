@@ -1,0 +1,10 @@
+#!/bin/bash
+
+choice=$(echo -e "PL(Legacy)\nBY(Legacy)\nBY(Latin)" | dmenu -p "Select an action:")
+
+case "$choice" in
+    "PL(Legacy)") setxkbmap pl -variant legacy ;;
+    "BY(Legacy)") setxkbmap by -variant legacy ;;
+    "BY(Latin)") setxkbmap by -variant latin ;;
+esac
+
