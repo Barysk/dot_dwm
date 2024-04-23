@@ -8,3 +8,5 @@ This is not fully suckless build, it uses:
 * mpv - media player
 * picom - fancy graphics :)
 * feh - wallpaper
+
+Feel free to reference on it, but be cautious when copying configs.
