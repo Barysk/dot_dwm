@@ -3,6 +3,7 @@
 This is not fully suckless build, it uses:
 * dwm - window manager
 * slstatus - status (batter, time, etc.) *<< I shall change this in the future (something like dwmblocks)*
+* dmenu - application menu
 * kitty - terminal emulator
 * i3lock - lockscreen
 * mpv - media player
