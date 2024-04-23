@@ -77,7 +77,7 @@ static const char *brightness_down[] = { "brightnessctl", "set", "5%-", NULL };
 static const char *brightness_up[] = { "brightnessctl", "set", "+5%", NULL };
 
 /* lockscreen command */
-static const char *lock_screen[] = { "i3lock", NULL };
+static const char *lock_screen[] = { "i3lock", "--image", "/home/bk/Photos/Wallpaper/ThinkPad_x220.png", "--tiling", "--show-failed-attempts", "--ignore-empty-password", NULL };
 
 /* multi monitor */
 static const char *connect_second_screen[] = { "xrandr", "--output", "VGA-1", "--auto", "--right-of", "LVDS-1", NULL };
