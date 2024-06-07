@@ -11,3 +11,5 @@ This is not fully suckless build, it uses:
 * feh - wallpaper
 
 Feel free to reference on it, but be cautious when copying configs.
+
+In future repositorium shall be remade, to become more compatible and easier to clone & use.
