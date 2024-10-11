@@ -1,0 +1,7 @@
+feh --bg-fill /home/bk/.config/my_system_things/my_system_photos/Wallpaper/NieR_Theme/OrchestralArrangementAlbumCover.webp &
+slstatus &
+picom &
+
+setxkbmap pl -variant legacy
+
+exec dwm

@@ -1,0 +1,10 @@
+#!/bin/sh
+
+feh --bg-fill /home/bk/.config/my_system_things/my_system_photos/Wallpaper/NieR_Theme/OrchestralArrangementAlbumCover.webp &
+dwmblocks &
+picom &
+
+setxkbmap pl -variant legacy
+xrandr --output DP-4 --mode 1920x1080 --rate 144
+
+exec dwm
