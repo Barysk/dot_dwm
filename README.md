@@ -2,10 +2,10 @@
 
 This build uses:
 * dwm - window manager
-** Patches made on PC
-** fullgaps
-** systray
-** attachaside
+    * Patches made on PC
+    * fullgaps
+    * systray
+    * attachaside
 * slstatus - status (battery, time, etc.)
 * dwmblocks - same as slstatus but better [on PC]
 * dmenu - application menu

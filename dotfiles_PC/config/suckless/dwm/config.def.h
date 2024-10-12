@@ -11,17 +11,18 @@ static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display 
 static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "monospace:size=10" };
-static const char dmenufont[]       = "monospace:size=10";
+static const char *fonts[]          = { "IBM 3270:size=10:bold" };
+static const char dmenufont[]       = "IBM 3270:size=10:bold";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
-static const char col_gray3[]       = "#bbbbbb";
-static const char col_gray4[]       = "#eeeeee";
-static const char col_cyan[]        = "#005577";
+static const char col_gray3[]       = "#ffffe6";//bb.
+static const char col_gray4[]       = "#111111";//ee.
+static const char col_cyan[]        = "#005577";// delete later
+static const char col_white[]       = "#ffffe6";/* replacement for cyan */
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+	[SchemeSel]  = { col_gray4, col_white,  col_white  },
 };
 
 /* tagging */
@@ -45,9 +46,9 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "T",        tile },    /* first entry is default */
-	{ "F",        NULL },    /* no layout function means floating behavior */
-	{ "M",        monocle },
+	{ "[T]",        tile },    /* first entry is default */
+	{ "[F]",        NULL },    /* no layout function means floating behavior */
+	{ "[M]",        monocle },
 };
 
 /* key definitions */
@@ -63,7 +64,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_white, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "kitty", NULL };
 
 /* volume commands */
@@ -81,6 +82,7 @@ static const char *make_screenshot[] = { "flameshot", "gui", NULL };
 
 /* change layout script */
 static const char *change_layout[] = { "/home/bk/.config/my_system_things/my_system_scripts/bk-change_layout", NULL };
+
 
 static const Key keys[] = {
 	/* modifier                     key         function        argument */
@@ -115,7 +117,7 @@ static const Key keys[] = {
     { 0,                            0x1008ff13, spawn,          {.v = volup } },        // volume up
     { 0,                            0x1008ff11, spawn,          {.v = voldown } },      // volume down
     { 0,                            0x1008ff12, spawn,          {.v = mute_audio } },   // mute button
-    { Mod1Mask,                     XK_Shift_L, spawn,          {.v = change_layout} }, // Alt + Shift, Keyboard layout change
+    { Mod1Mask,                     XK_Shift_L, spawn,          {.v = change_layout } }, // Alt + Shift, Keyboard layout change
 	TAGKEYS(                        XK_1,                       0)
 	TAGKEYS(                        XK_2,                       1)
 	TAGKEYS(                        XK_3,                       2)
