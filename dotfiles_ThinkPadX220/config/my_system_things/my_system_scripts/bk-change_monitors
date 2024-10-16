@@ -21,7 +21,7 @@
 #   3. duplicate
 #
 
-choice=$(echo -e "Reset\nExtend\nRedirect\nDuplicate" | dmenu -fn 'IBM 3270:size=10' -nb '#111111' -nf '#777777' -sb '#004444' -sf '#cccccc' -p "Select an action:")
+choice=$(echo -e "Reset\nExtend\nRedirect\nDuplicate" | dmenu -b -fn 'IBM 3270:size=10:bold' -nb '#222222' -nf '#ffffe6' -sb '#ffffe6' -sf '#111111' -p "Select an action:")
 
 case "$choice" in
     "Reset")
@@ -30,21 +30,21 @@ case "$choice" in
         feh --bg-fill /home/bk/.config/my_system_things/my_system_photos/Wallpaper/NieR_Theme/OrchestralArrangementAlbumCover.webp;;
 
     "Extend") 
-        output=$(echo -e "DP-1\nVGA-1\nDP-2\nVGA-2" | dmenu  -fn 'IBM 3270:size=10' -nb '#111111' -nf '#777777' -sb '#004444' -sf '#cccccc' -p "Choose output:")
+        output=$(echo -e "DP-1\nVGA-1\nDP-2\nVGA-2" | dmenu -b -fn 'IBM 3270:size=10:bold' -nb '#222222' -nf '#ffffe6' -sb '#ffffe6' -sf '#111111' -p "Choose output:")
         xrandr --auto
         xrandr --output "$output" --preferred --left-of LVDS-1
 	sleep 5
         feh --bg-fill /home/bk/.config/my_system_things/my_system_photos/Wallpaper/NieR_Theme/OrchestralArrangementAlbumCover.webp;;
         
     "Redirect")
-        output=$(echo -e "DP-1\nVGA-1\nDP-2\nVGA-2" | dmenu -fn 'IBM 3270:size=10' -nb '#111111' -nf '#777777' -sb '#004444' -sf '#cccccc' -p "Choose output:")
+        output=$(echo -e "DP-1\nVGA-1\nDP-2\nVGA-2" | dmenu -b -fn 'IBM 3270:size=10:bold' -nb '#222222' -nf '#ffffe6' -sb '#ffffe6' -sf '#111111' -p "Choose output:")
         xrandr --output "$output" --preferred 
         xrandr --output LVDS-1 --off
 	sleep 5
         feh --bg-fill /home/bk/.config/my_system_things/my_system_photos/Wallpaper/NieR_Theme/OrchestralArrangementAlbumCover.webp;;
     
     "Duplicate")
-        output=$(echo -e "DP-1\nVGA-1\nDP-2\nVGA-2" | dmenu -fn 'IBM 3270:size=10' -nb '#111111' -nf '#777777' -sb '#004444' -sf '#cccccc' -p "Choose output:")
+        output=$(echo -e "DP-1\nVGA-1\nDP-2\nVGA-2" | dmenu -b -fn 'IBM 3270:size=10:bold' -nb '#222222' -nf '#ffffe6' -sb '#ffffe6' -sf '#111111' -p "Choose output:")
         xrandr --output LVDS-1 --mode 1280x720
         xrandr --output "$output" --mode 1280x720 --same-as LVDS-1
 	sleep 5

@@ -3,30 +3,30 @@
 /* appearance */
 static const unsigned int borderpx  = 3;        /* border pixel of windows */
 static const unsigned int gappx     = 5;        /* gaps between windows */
-static const unsigned int snap      = 32;       /* snap pixel */
+static const unsigned int snap      = 8;        /* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
-static const unsigned int systrayonleft = 0;    /* 0: systray in the right corner, >0: systray on left of status text */
+static const unsigned int systrayonleft = 1;    /* 0: systray in the right corner, >0: systray on left of status text */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
 static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 0;        /* 0 means bottom bar */
-static const char *fonts[]          = { "IBM 3270:size=10" };
-static const char dmenufont[]       = "IBM 3270:size=10";
+static const char *fonts[]          = { "IBM 3270:size=10:bold" };
+static const char dmenufont[]       = "IBM 3270:size=10:bold";
 /*
  * default : delete later
  * static const char *fonts[]          = { "monospace:size=10" };
  * static const char dmenufont[]       = "monospace:size=10";
 */
-static const char col_gray1[]       = "#111111";
-static const char col_gray2[]       = "#222222";
-static const char col_gray3[]       = "#777777";
-static const char col_gray4[]       = "#cccccc";
-static const char col_cyan[]        = "#004444";
+static const char col_gray1[]       = "#222222";
+static const char col_gray2[]       = "#444444";
+static const char col_gray3[]       = "#ffffe6";
+static const char col_gray4[]       = "#111111";
+static const char col_white[]       = "#ffffe6";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+	[SchemeSel]  = { col_gray4, col_white,  col_white  },
 };
 
 /* tagging */
@@ -68,13 +68,13 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-b", "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_white, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "kitty", NULL };
 
 /* volume commands */
-static const char *volup[] = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+10%", NULL };
-static const char *voldown[] = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-10%", NULL };
-static const char *mute_audio[] = { "pactl", "set-sink-mute", "@DEFAULT_SINK@", "toggle", NULL };
+static const char *volup[] = { "sh", "-c", "pactl set-sink-volume @DEFAULT_SINK@ +10% && kill -44 $(pidof dwmblocks)", NULL };
+static const char *voldown[] = { "sh", "-c", "pactl set-sink-volume @DEFAULT_SINK@ -10% && kill -44 $(pidof dwmblocks)", NULL };
+static const char *mute_audio[] = { "sh", "-c", "pactl set-sink-mute @DEFAULT_SINK@ toggle && kill -44 $(pidof dwmblocks)", NULL };
 static const char *toggle_mic[] = { "pactl", "set-source-mute", "@DEFAULT_SOURCE@", "toggle", NULL };
 
 /* brightness commands */

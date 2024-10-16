@@ -1,10 +1,11 @@
 #!/bin/bash
 
-choice=$(echo -e "PL(Legacy)\nBY(Legacy)\nBY(Latin)" | dmenu -fn 'IBM 3270:size=10' -nb '#111111' -nf '#777777' -sb '#004444' -sf '#cccccc' -p "Select an action:")
+choice=$(echo -e "pl(legacy)\nby(legacy)\nby(latin)" | dmenu -b -fn 'IBM 3270:size=10:bold' -nb '#222222' -nf '#ffffe6' -sb '#ffffe6' -sf '#111111' -p "Select an action:")
 
 case "$choice" in
-    "PL(Legacy)") setxkbmap pl -variant legacy ;;
-    "BY(Legacy)") setxkbmap by -variant legacy ;;
-    "BY(Latin)") setxkbmap by -variant latin ;;
+    "pl(legacy)") setxkbmap pl -variant legacy ;;
+    "by(legacy)") setxkbmap by -variant legacy ;;
+    "by(latin)") setxkbmap by -variant latin ;;
 esac
 
+kill -38 $(pidof dwmblocks)
