@@ -1,0 +1,14 @@
+#!/bin/bash
+
+i3lock --image /home/bk/.config/my_system_things/my_system_photos/Wallpaper/Touhou_Project/Nitori_1.png --tiling --show-failed-attempts --ignore-empty-password
+
+# Directory containing the images
+#IMAGE_DIR="/home/bk/.config/my_system_things/my_system_photos/Wallpaper/Touhou_Project"
+
+# Randomly select an image from the directory
+#RANDOM_IMAGE=$(find "$IMAGE_DIR" -type f | shuf -n 1)
+
+#echo "$RANDOM_IMAGE"
+
+# Run i3lock with the randomly selected image
+#i3lock --image "$RANDOM_IMAGE" --tiling --show-failed-attempts --ignore-empty-password

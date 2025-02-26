@@ -1,6 +1,6 @@
 #!/bin/bash
 
-choice=$(echo -e "Shutdown\nReboot\nLogout" | dmenu -fn 'IBM 3270:size=10' -nb '#111111' -nf '#777777' -sb '#004444' -sf '#cccccc' -p "Select an action:")
+choice=$(echo -e "Shutdown\nReboot\nLogout" | dmenu -fn 'IBM 3270:size=10' -nb '#111111' -nf '#ffffff' -sb '#4d0000' -sf '#ffffff' -p "Select an action:")
 
 case "$choice" in
     "Shutdown") systemctl poweroff ;;
