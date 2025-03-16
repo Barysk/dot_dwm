@@ -1,0 +1,12 @@
+#!/bin/sh
+
+feh --bg-fill /home/bk/.config/suckless/images/wallpaper/NieR_Theme/OrchestralArrangementAlbumCover.webp &
+dwmblocks &
+picom &
+#redshift -t 5700:1000 -l 51:17 & #Latitude:Longitute of Wroclaw | Uncomment for automatic
+
+setxkbmap pl -variant legacy
+xrandr --output DP-4 --mode 1366x768  --rate 60	# x220
+#xrandr --output DP-4 --mode 1920x1080 --rate 144 	# PC
+
+exec dwm
