@@ -2,8 +2,8 @@
 
 /* appearance */
 static const unsigned int borderpx  = 0;        /* border pixel of windows */
-static const unsigned int gappx     = 5;        /* gaps between windows */
-static const unsigned int snap      = 8;       /* snap pixel */
+static const unsigned int gappx     = 3;        /* gaps between windows */
+static const unsigned int snap      = 0;       /* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft = 1;    /* 0: systray in the right corner, >0: systray on left of status text */
 static const unsigned int systrayspacing = 1;   /* systray spacing */
@@ -73,6 +73,7 @@ static const char *dmenucmd[] = {
   NULL
 };
 static const char *termcmd[]  = { "kitty", NULL };
+static const char *explrcmd[]  = { "pcmanfm", NULL };
 
 /* volume commands */
 static const char *volup[] = { "sh", "-c", "pactl set-sink-volume @DEFAULT_SINK@ +10% && kill -44 $(pidof dwmblocks)", NULL };
@@ -103,6 +104,7 @@ static const Key keys[] = {
 	/* modifier                     key         function        argument */
 	{ MODKEY,                       XK_p,       spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return,  spawn,          {.v = termcmd } },
+	{ MODKEY,                       XK_e,       spawn,          {.v = explrcmd } },
 	{ MODKEY,                       XK_b,       togglebar,      {0} },
 	{ MODKEY,                       XK_j,       focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,       focusstack,     {.i = -1 } },

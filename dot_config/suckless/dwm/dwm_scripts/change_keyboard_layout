@@ -1,12 +1,20 @@
 #!/bin/bash
 
-choice=$(echo -e "pl(legacy)\nby(legacy)\nby(latin)" | dmenu -fn 'IBM 3270:size=10:bold' -nb '#111111' -nf '#ffffff' -sb '#4d0000' -sf '#ffffff' -p "Select an action:")
+# Get the current keyboard layout and variant
+current_layout=$(setxkbmap -query | grep layout | awk '{print $2}')
+current_variant=$(setxkbmap -query | grep variant | awk '{print $2}')
 
-case "$choice" in
-    "pl(legacy)") setxkbmap pl -variant legacy ;;
-    "by(legacy)") setxkbmap by -variant legacy ;;
-    "by(latin)") setxkbmap by -variant latin ;;
-esac
+# Logic for toggling between layouts
+if [[ "$current_layout" == "pl" && "$current_variant" == "legacy" ]]; then
+    # Switch to by(legacy)
+    setxkbmap by -variant legacy
+elif [[ "$current_layout" == "by" && "$current_variant" == "legacy" ]]; then
+    # Switch to pl(legacy)
+    setxkbmap pl -variant legacy
+else
+    # Default to pl(legacy) if neither is set
+    setxkbmap pl -variant legacy
+fi
 
 kill -38 $(pidof dwmblocks)
 
