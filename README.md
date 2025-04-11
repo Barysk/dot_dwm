@@ -4,7 +4,7 @@ This build uses:
 * dwm - window manager
     * fullgaps
     * systray
-    * attachaside
+    * attachasideandbelow
 * dwmblocks - same as slstatus but better
 * dmenu - application menu
 * kitty - terminal emulator
