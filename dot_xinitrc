@@ -11,6 +11,10 @@ setxkbmap pl -variant legacy
 xrandr --output DP-4 --mode 1366x768  --rate 60	# x220
 #xrandr --output DP-4 --mode 1920x1080 --rate 144 	# PC
 
+# Turn off screen functions OFF
+xset s off
+xset -dpms
+
 # File picker not opening fix
 if [ -d /etc/X11/xinit/xinitrc.d ] ; then
  for f in /etc/X11/xinit/xinitrc.d/?*.sh ; do
