@@ -1,12 +1,23 @@
 #!/bin/sh
 
+# Start applications on startup
 feh --bg-fill /home/bk/.config/suckless/images/wallpaper/NieR_Theme/OrchestralArrangementAlbumCover.webp &
 dwmblocks &
 picom &
 #redshift -t 5700:1000 -l 51:17 & #Latitude:Longitute of Wroclaw | Uncomment for automatic
 
+# Initial settings
 setxkbmap pl -variant legacy
 xrandr --output DP-4 --mode 1366x768  --rate 60	# x220
 #xrandr --output DP-4 --mode 1920x1080 --rate 144 	# PC
 
+# File picker not opening fix
+if [ -d /etc/X11/xinit/xinitrc.d ] ; then
+ for f in /etc/X11/xinit/xinitrc.d/?*.sh ; do
+  [ -x "$f" ] && . "$f"
+ done
+ unset f
+fi
+
+# Start dwm
 exec dwm
