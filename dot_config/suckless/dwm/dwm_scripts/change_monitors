@@ -26,29 +26,29 @@ choice=$(echo -e "Reset\nExtend\nRedirect\nDuplicate" | dmenu -fn 'IBM 3270:size
 case "$choice" in
     "Reset")
         xrandr --auto
-	sleep 5
-        feh --bg-fill /home/bk/.config/my_system_things/my_system_photos/Wallpaper/NieR_Theme/OrchestralArrangementAlbumCover.webp;;
+        sleep 5
+        feh --bg-fill /home/bk/.config/suckless/images/wallpaper/NieR_Theme/OrchestralArrangementAlbumCover.webp;;
 
-    "Extend") 
-        output=$(echo -e "DP-1\nVGA-1\nDP-2\nVGA-2" | dmenu  -fn 'IBM 3270:size=10' -nb '#111111' -nf '#ffffff' -sb '#4d0000' -sf '#ffffff' -p "Choose output:")
+    "Extend")
+        output=$(echo -e "HDMI-1\nDP-1\nVGA-1\nDP-2\nVGA-2" | dmenu  -fn 'IBM 3270:size=10' -nb '#111111' -nf '#ffffff' -sb '#4d0000' -sf '#ffffff' -p "Choose output:")
         xrandr --auto
-        xrandr --output "$output" --preferred --left-of LVDS-1
-	sleep 5
-        feh --bg-fill /home/bk/.config/my_system_things/my_system_photos/Wallpaper/NieR_Theme/OrchestralArrangementAlbumCover.webp;;
-        
+        xrandr --output "$output" --preferred --right-of eDP-1
+        sleep 5
+        feh --bg-fill /home/bk/.config/suckless/images/wallpaper/NieR_Theme/OrchestralArrangementAlbumCover.webp;;
+
     "Redirect")
-        output=$(echo -e "DP-1\nVGA-1\nDP-2\nVGA-2" | dmenu -fn 'IBM 3270:size=10' -nb '#111111' -nf '#ffffff' -sb '#4d0000' -sf '#ffffff' -p "Choose output:")
+        output=$(echo -e "HDMI-1\nDP-1\nVGA-1\nDP-2\nVGA-2" | dmenu -fn 'IBM 3270:size=10' -nb '#111111' -nf '#ffffff' -sb '#4d0000' -sf '#ffffff' -p "Choose output:")
         xrandr --output "$output" --preferred 
-        xrandr --output LVDS-1 --off
-	sleep 5
-        feh --bg-fill /home/bk/.config/my_system_things/my_system_photos/Wallpaper/NieR_Theme/OrchestralArrangementAlbumCover.webp;;
-    
+        xrandr --output eDP-1 --off
+        sleep 5
+        feh --bg-fill /home/bk/.config/suckless/images/wallpaper/NieR_Theme/OrchestralArrangementAlbumCover.webp;;
+
     "Duplicate")
-        output=$(echo -e "DP-1\nVGA-1\nDP-2\nVGA-2" | dmenu -fn 'IBM 3270:size=10' -nb '#111111' -nf '#ffffff' -sb '#4d0000' -sf '#ffffff' -p "Choose output:")
-        xrandr --output LVDS-1 --mode 1280x720
-        xrandr --output "$output" --mode 1280x720 --same-as LVDS-1
-	sleep 5
-        feh --bg-fill /home/bk/.config/my_system_things/my_system_photos/Wallpaper/NieR_Theme/OrchestralArrangementAlbumCover.webp;;
-        
-esac
+        output=$(echo -e "HDMI-1\nDP-1\nVGA-1\nDP-2\nVGA-2" | dmenu -fn 'IBM 3270:size=10' -nb '#111111' -nf '#ffffff' -sb '#4d0000' -sf '#ffffff' -p "Choose output:")
+        xrandr --output eDP-1 --mode 1920x1080
+        xrandr --output "$output" --mode 1920x1080 --same-as eDP-1
+        sleep 5
+        feh --bg-fill /home/bk/.config/suckless/images/wallpaper/NieR_Theme/OrchestralArrangementAlbumCover.webp;;
+
+    esac
 

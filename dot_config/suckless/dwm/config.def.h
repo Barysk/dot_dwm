@@ -2,7 +2,7 @@
 
 /* appearance */
 static const unsigned int borderpx  = 0;        /* border pixel of windows */
-static const unsigned int gappx     = 3;        /* gaps between windows */
+static const unsigned int gappx     = 8;        /* gaps between windows */
 static const unsigned int snap      = 0;       /* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft = 1;    /* 0: systray in the right corner, >0: systray on left of status text */
@@ -37,7 +37,7 @@ static const Rule rules[] = {
 };
 
 /* layout(s) */
-static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
+static const float mfact     = 0.75; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
@@ -82,8 +82,8 @@ static const char *mute_audio[] = { "sh", "-c", "pactl set-sink-mute @DEFAULT_SI
 static const char *toggle_mic[] = { "pactl", "set-source-mute", "@DEFAULT_SOURCE@", "toggle", NULL };
 
 /* brightness commands */
-static const char *brightness_down[] = { "brightnessctl", "set", "5%-", NULL };
-static const char *brightness_up[] = { "brightnessctl", "set", "+5%", NULL };
+static const char *brightness_down[] = { "brightnessctl", "set", "10%-", NULL };
+static const char *brightness_up[] = { "brightnessctl", "set", "+10%", NULL };
 
 /* multi monitor */
 static const char *connect_second_screen[] = { "/home/bk/.config/suckless/dwm/dwm_scripts/change_monitors", NULL };
@@ -129,16 +129,16 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_minus,   setgaps,        {.i = -1 } },
 	{ MODKEY,                       XK_equal,   setgaps,        {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_equal,   setgaps,        {.i = 0  } },
-    { 0,                            0x1008ff02, spawn,          {.v = brightness_up } },     // brightness up 	//x220
-    { 0,                            0x1008ff03, spawn,          {.v = brightness_down } },   // brightness down	//x220
-    { MODKEY|ShiftMask,             XK_l,       spawn,          {.v = lock_screen } },      // screen lock
+    { 0,                            0x1008ff02, spawn,          {.v = brightness_up } },    // brightness up
+    { 0,                            0x1008ff03, spawn,          {.v = brightness_down } },  // brightness down
+    { MODKEY,                       XK_Escape,  spawn,          {.v = lock_screen } },      // screen lock
     { MODKEY|ShiftMask,             XK_s,       spawn,          {.v = make_screenshot} },   // screenshot
     { 0,                            0x1008ff59, spawn,          {.v = connect_second_screen } },    // second screen
     { 0,                            0x1008ff13, spawn,          {.v = volup } },        // volume up
     { 0,                            0x1008ff11, spawn,          {.v = voldown } },      // volume down
     { 0,                            0x1008ff12, spawn,          {.v = mute_audio } },   // mute button
     { 0,                            0x1008ffb2, spawn,          {.v = toggle_mic } },   // mute source
-    { Mod1Mask,                     XK_Shift_L, spawn,          {.v = change_layout } }, // Alt + Shift, Keyboard layout change
+    { Mod1Mask,                     XK_Shift_L, spawn,          {.v = change_layout } },// Alt + Shift, Keyboard layout change
 //  { 0,                            0x1008ff2a, spawn,          {.v = logout_cmd } },   // power off button // Add if needed
 	TAGKEYS(                        XK_1,                       0)
 	TAGKEYS(                        XK_2,                       1)
@@ -149,7 +149,7 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_7,                       6)
 	TAGKEYS(                        XK_8,                       7)
 	TAGKEYS(                        XK_9,                       8)
-	{ MODKEY|ShiftMask,             XK_q,       quit,           {0} },
+	{ MODKEY|ShiftMask,             XK_Escape,  quit,           {0} },
 };
 
 /* button definitions */
