@@ -6,7 +6,7 @@ static const unsigned int gappx     = 8;        /* gaps between windows */
 static const unsigned int snap      = 0;       /* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft = 1;    /* 0: systray in the right corner, >0: systray on left of status text */
-static const unsigned int systrayspacing = 1;   /* systray spacing */
+static const unsigned int systrayspacing = 4;   /* systray spacing */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
 static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
@@ -24,7 +24,7 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+static const char *tags[] = { "一", "二", "三", "四", "五", "六", "七", "八", "九", "十" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -44,9 +44,9 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "[T]",        tile },    /* first entry is default */
-	{ "[F]",        NULL },    /* no layout function means floating behavior */
-	{ "[M]",        monocle },
+	{ "タイル",        tile },    /* first entry is default */
+	{ "フロート",      NULL },    /* no layout function means floating behavior */
+	{ "メガネ",        monocle },
 };
 
 /* key definitions */
@@ -74,6 +74,8 @@ static const char *dmenucmd[] = {
 };
 static const char *termcmd[]  = { "kitty", NULL };
 static const char *explrcmd[]  = { "pcmanfm", NULL };
+static const char *browsercmd[]  = { "brave", NULL };
+static const char *telegramcmd[]  = { "Telegram", NULL };
 
 /* volume commands */
 static const char *volup[] = { "sh", "-c", "pactl set-sink-volume @DEFAULT_SINK@ +10% && kill -44 $(pidof dwmblocks)", NULL };
@@ -105,7 +107,9 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_p,       spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return,  spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_e,       spawn,          {.v = explrcmd } },
-	{ MODKEY,                       XK_b,       togglebar,      {0} },
+	{ MODKEY,                       XK_t,       spawn,          {.v = telegramcmd } },
+	{ MODKEY,                       XK_b,       spawn,          {.v = browsercmd } },
+	{ MODKEY|ShiftMask,             XK_b,       togglebar,      {0} },
 	{ MODKEY,                       XK_j,       focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,       focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_i,       incnmaster,     {.i = +1 } },
@@ -115,9 +119,9 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_Return,  zoom,           {0} },
 	{ MODKEY,                       XK_Tab,     view,           {0} },
 	{ MODKEY,                       XK_q,       killclient,     {0} },
-	{ MODKEY,                       XK_t,       setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_f,       setlayout,      {.v = &layouts[1]} },
-	{ MODKEY,                       XK_m,       setlayout,      {.v = &layouts[2]} },
+	{ MODKEY|ShiftMask,             XK_t,       setlayout,      {.v = &layouts[0]} },
+	{ MODKEY|ShiftMask,             XK_f,       setlayout,      {.v = &layouts[1]} },
+	{ MODKEY|ShiftMask,             XK_m,       setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,                       XK_space,   setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,   togglefloating, {0} },
 	{ MODKEY,                       XK_0,       view,           {.ui = ~0 } },
@@ -149,6 +153,7 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_7,                       6)
 	TAGKEYS(                        XK_8,                       7)
 	TAGKEYS(                        XK_9,                       8)
+	TAGKEYS(                        XK_0,                       9)
 	{ MODKEY|ShiftMask,             XK_Escape,  quit,           {0} },
 };
 
