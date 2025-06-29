@@ -1,5 +1,8 @@
 # DWM config, made for My devices
 
+An example of how this config looks
+![An image of how it looks](example.png)
+
 This build uses:
 * dwm - window manager
     * fullgaps
