@@ -2,6 +2,9 @@
 # ~/.bashrc
 #
 
+# Wallpaper
+export WALLPAPER_PATH="$HOME/.config/suckless/images/wallpaper/Touhou_Project/suika.jpg"
+
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 

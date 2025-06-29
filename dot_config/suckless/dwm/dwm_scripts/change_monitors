@@ -27,28 +27,28 @@ case "$choice" in
     "Reset")
         xrandr --auto
         sleep 5
-        feh --bg-fill /home/bk/.config/suckless/images/wallpaper/NieR_Theme/OrchestralArrangementAlbumCover.webp;;
+        feh --bg-fill "$WALLPAPER_PATH";;
 
     "Extend")
         output=$(echo -e "HDMI-1\nDP-1\nVGA-1\nDP-2\nVGA-2" | dmenu  -fn 'IBM 3270:size=10' -nb '#111111' -nf '#ffffff' -sb '#4d0000' -sf '#ffffff' -p "Choose output:")
         xrandr --auto
         xrandr --output "$output" --preferred --right-of eDP-1
         sleep 5
-        feh --bg-fill /home/bk/.config/suckless/images/wallpaper/NieR_Theme/OrchestralArrangementAlbumCover.webp;;
+        feh --bg-fill "$WALLPAPER_PATH";;
 
     "Redirect")
         output=$(echo -e "HDMI-1\nDP-1\nVGA-1\nDP-2\nVGA-2" | dmenu -fn 'IBM 3270:size=10' -nb '#111111' -nf '#ffffff' -sb '#4d0000' -sf '#ffffff' -p "Choose output:")
         xrandr --output "$output" --preferred 
         xrandr --output eDP-1 --off
         sleep 5
-        feh --bg-fill /home/bk/.config/suckless/images/wallpaper/NieR_Theme/OrchestralArrangementAlbumCover.webp;;
+        feh --bg-fill "$WALLPAPER_PATH";;
 
     "Duplicate")
         output=$(echo -e "HDMI-1\nDP-1\nVGA-1\nDP-2\nVGA-2" | dmenu -fn 'IBM 3270:size=10' -nb '#111111' -nf '#ffffff' -sb '#4d0000' -sf '#ffffff' -p "Choose output:")
         xrandr --output eDP-1 --mode 1920x1080
         xrandr --output "$output" --mode 1920x1080 --same-as eDP-1
         sleep 5
-        feh --bg-fill /home/bk/.config/suckless/images/wallpaper/NieR_Theme/OrchestralArrangementAlbumCover.webp;;
+        feh --bg-fill "$WALLPAPER_PATH";;
 
     esac
 

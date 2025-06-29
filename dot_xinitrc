@@ -1,10 +1,8 @@
 #!/bin/sh
 
-WALLPAPER_PATH="$HOME/.config/suckless/images/wallpaper/Touhou_Project/suika.jpg"
-
 # Start applications on startup
-feh --bg-fill "$WALLPAPER_PATH" &
 betterlockscreen -u "$WALLPAPER_PATH" --fx dimblur &
+feh --bg-fill "$WALLPAPER_PATH" &
 dwmblocks &
 picom &
 nm-applet &
