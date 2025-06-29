@@ -1,14 +1,19 @@
 #!/bin/sh
 
+WALLPAPER_PATH="$HOME/.config/suckless/images/wallpaper/Touhou_Project/suika.jpg"
+
 # Start applications on startup
-feh --bg-fill /home/bk/.config/suckless/images/wallpaper/NieR_Theme/OrchestralArrangementAlbumCover.webp &
+feh --bg-fill "$WALLPAPER_PATH" &
+betterlockscreen -u "$WALLPAPER_PATH" --fx dimblur &
 dwmblocks &
 picom &
+nm-applet &
+dunst &
 #redshift -t 5700:1000 -l 51:17 & #Latitude:Longitute of Wroclaw | Uncomment for automatic
 
 # Initial settings
 setxkbmap pl -variant legacy
-xrandr --output DP-4 --mode 1366x768  --rate 60	# x220
+xrandr --output eDP-1 --mode 1920x1080  --rate 60	# x220
 #xrandr --output DP-4 --mode 1920x1080 --rate 144 	# PC
 
 # Turn off screen functions OFF
@@ -25,3 +30,4 @@ fi
 
 # Start dwm
 exec dwm
+
