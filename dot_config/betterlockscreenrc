@@ -15,7 +15,7 @@ quiet=false
 # default theme
 loginbox=00000066
 loginshadow=00000000
-locktext="Type password to unlock..."
+locktext="Waiting for password..."
 font="IBM 3270"
 ringcolor=ffffffff
 insidecolor=00000000
