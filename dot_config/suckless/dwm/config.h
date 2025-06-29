@@ -6,7 +6,7 @@ static const unsigned int gappx     = 8;        /* gaps between windows */
 static const unsigned int snap      = 0;       /* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft = 1;    /* 0: systray in the right corner, >0: systray on left of status text */
-static const unsigned int systrayspacing = 4;   /* systray spacing */
+static const unsigned int systrayspacing = 0;   /* systray spacing */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
 static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
@@ -87,6 +87,11 @@ static const char *toggle_mic[] = { "pactl", "set-source-mute", "@DEFAULT_SOURCE
 static const char *brightness_down[] = { "brightnessctl", "set", "10%-", NULL };
 static const char *brightness_up[] = { "brightnessctl", "set", "+10%", NULL };
 
+/* multimedia */
+static const char *multimedia_pause[] = { "playerctl", "play-pause", NULL };
+static const char *multimedia_next[] = { "playerctl", "next", NULL };
+static const char *multimedia_previous[] = { "playerctl", "previous", NULL };
+
 /* multi monitor */
 static const char *connect_second_screen[] = { "/home/bk/.config/suckless/dwm/dwm_scripts/change_monitors", NULL };
 
@@ -133,6 +138,9 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_minus,   setgaps,        {.i = -1 } },
 	{ MODKEY,                       XK_equal,   setgaps,        {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_equal,   setgaps,        {.i = 0  } },
+	{ MODKEY,                       XK_Down,    spawn,          {.v = multimedia_pause  } },
+	{ MODKEY,                       XK_Right,   spawn,          {.v = multimedia_next  } },
+	{ MODKEY,                       XK_Left,    spawn,          {.v = multimedia_previous  } },
     { 0,                            0x1008ff02, spawn,          {.v = brightness_up } },    // brightness up
     { 0,                            0x1008ff03, spawn,          {.v = brightness_down } },  // brightness down
     { MODKEY,                       XK_Escape,  spawn,          {.v = lock_screen } },      // screen lock
