@@ -24,7 +24,7 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = { "一", "二", "三", "四", "五", "六", "七", "八", "九", "十" };
+static const char *tags[] = { "一", "二", "三", "四", "五", "六", "七", "八", "九" };
 
 static const Rule rules[] = {
     /* xprop(1):
@@ -126,11 +126,12 @@ static const Key keys[] = {
     { MODKEY,                       XK_q,       killclient,     {0} },
     { MODKEY|ShiftMask,             XK_t,       setlayout,      {.v = &layouts[0]} },
     { MODKEY|ShiftMask,             XK_f,       setlayout,      {.v = &layouts[1]} },
+    { MODKEY,                       XK_f,       togglefullscr,  {0} },
     { MODKEY|ShiftMask,             XK_m,       setlayout,      {.v = &layouts[2]} },
 //  { MODKEY,                       XK_space,   setlayout,      {0} }, // I don't use it
-    { MODKEY|ShiftMask,             XK_space,   togglefloating, {0} },
     { MODKEY,                       XK_0,       view,           {.ui = ~0 } },
     { MODKEY|ShiftMask,             XK_0,       tag,            {.ui = ~0 } },
+    { MODKEY|ShiftMask,             XK_space,   togglefloating, {0} },
     { MODKEY,                       XK_comma,   focusmon,       {.i = -1 } },
     { MODKEY,                       XK_period,  focusmon,       {.i = +1 } },
     { MODKEY|ShiftMask,             XK_comma,   tagmon,         {.i = -1 } },
@@ -162,7 +163,6 @@ static const Key keys[] = {
     TAGKEYS(                        XK_7,                       6)
     TAGKEYS(                        XK_8,                       7)
     TAGKEYS(                        XK_9,                       8)
-    TAGKEYS(                        XK_0,                       9)
     { MODKEY|ShiftMask,             XK_Escape,  quit,           {0} },
 };
 
