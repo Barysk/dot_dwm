@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# Java fixes [https://wiki.archlinux.org/title/Java#Gray_window,_applications_not_resizing_with_WM,_menus_immediately_closing]
+export _JAVA_AWT_WM_NONREPARENTING=1
+AWT_TOOLKIT=MToolkit
+
 # Start applications on startup
 betterlockscreen -u "$WALLPAPER_PATH" --fx dimblur &
 feh --bg-fill "$WALLPAPER_PATH" &

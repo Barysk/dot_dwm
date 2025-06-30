@@ -11,6 +11,7 @@ This build uses:
     * alwayscenter
     * attachaside
     * fullgaps
+    * pertag
     * systray
     * warp
 * dwmblocks - same as slstatus but better
