@@ -15,8 +15,7 @@ dunst &
 
 # Initial settings
 setxkbmap pl -variant legacy
-xrandr --output eDP-1 --mode 1920x1080  --rate 60	# x220
-#xrandr --output DP-4 --mode 1920x1080 --rate 144 	# PC
+xrandr --output "$MAIN_MONITOR" --mode "$MAIN_MONITOR_MODE"  --rate "$MAIN_MONITOR_MODE"
 
 # Turn off screen functions OFF
 xset s off

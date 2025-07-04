@@ -11,8 +11,8 @@ static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display 
 static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "IBM 3270:size=10:bold" };
-static const char dmenufont[]       = "IBM 3270:size=10:bold";
+static const char *fonts[]          = { "M PLUS 2:size=9:bold" };
+static const char dmenufont[]       = "M PLUS 2:size=9:bold";
 
 static const char col_black[]		= "#111111";
 static const char col_red[]			= "#4d0000";
@@ -93,7 +93,7 @@ static const char *multimedia_next[] = { "playerctl", "next", NULL };
 static const char *multimedia_previous[] = { "playerctl", "previous", NULL };
 
 /* multi monitor */
-static const char *connect_second_screen[] = { "/home/bk/.config/suckless/dwm/dwm_scripts/change_monitors", NULL };
+static const char *connect_second_screen[] = { "/home/bk/.config/suckless/dwm/dwm_scripts/change_monitors", dmenufont, NULL };
 
 /* lockscreen command */
 static const char *lock_screen[] = { "/home/bk/.config/suckless/dwm/dwm_scripts/lockscreen", NULL };

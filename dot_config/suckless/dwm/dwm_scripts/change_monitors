@@ -21,33 +21,36 @@
 #   3. duplicate
 #
 
-choice=$(echo -e "Reset\nExtend\nRedirect\nDuplicate" | dmenu -fn 'IBM 3270:size=10' -nb '#111111' -nf '#ffffff' -sb '#4d0000' -sf '#ffffff' -p "Select an action:")
+# must be a variable
+dmenu_font="$1"
+
+choice=$(echo -e "Reset\nExtend\nRedirect\nDuplicate" | dmenu -fn "$dmenu_font" -nb '#111111' -nf '#ffffff' -sb '#4d0000' -sf '#ffffff' -p "Select an action:")
 
 case "$choice" in
     "Reset")
         xrandr --auto
-        sleep 5
+        sleep 1
         feh --bg-fill "$WALLPAPER_PATH";;
 
     "Extend")
-        output=$(echo -e "HDMI-1\nDP-1\nVGA-1\nDP-2\nVGA-2" | dmenu  -fn 'IBM 3270:size=10' -nb '#111111' -nf '#ffffff' -sb '#4d0000' -sf '#ffffff' -p "Choose output:")
+        output=$(echo -e "HDMI-1\nDP-1\nVGA-1\nDP-2\nVGA-2" | dmenu  -fn "$dmenu_font" -nb '#111111' -nf '#ffffff' -sb '#4d0000' -sf '#ffffff' -p "Choose output:")
         xrandr --auto
-        xrandr --output "$output" --preferred --right-of eDP-1
-        sleep 5
+        xrandr --output "$output" --preferred --right-of "$MAIN_MONITOR"
+        sleep 1
         feh --bg-fill "$WALLPAPER_PATH";;
 
     "Redirect")
-        output=$(echo -e "HDMI-1\nDP-1\nVGA-1\nDP-2\nVGA-2" | dmenu -fn 'IBM 3270:size=10' -nb '#111111' -nf '#ffffff' -sb '#4d0000' -sf '#ffffff' -p "Choose output:")
+        output=$(echo -e "HDMI-1\nDP-1\nVGA-1\nDP-2\nVGA-2" | dmenu -fn "$dmenu_font" -nb '#111111' -nf '#ffffff' -sb '#4d0000' -sf '#ffffff' -p "Choose output:")
         xrandr --output "$output" --preferred 
-        xrandr --output eDP-1 --off
-        sleep 5
+        xrandr --output "$MAIN_MONITOR" --off
+        sleep 1
         feh --bg-fill "$WALLPAPER_PATH";;
 
     "Duplicate")
-        output=$(echo -e "HDMI-1\nDP-1\nVGA-1\nDP-2\nVGA-2" | dmenu -fn 'IBM 3270:size=10' -nb '#111111' -nf '#ffffff' -sb '#4d0000' -sf '#ffffff' -p "Choose output:")
-        xrandr --output eDP-1 --mode 1920x1080
-        xrandr --output "$output" --mode 1920x1080 --same-as eDP-1
-        sleep 5
+        output=$(echo -e "HDMI-1\nDP-1\nVGA-1\nDP-2\nVGA-2" | dmenu -fn "$dmenu_font" -nb '#111111' -nf '#ffffff' -sb '#4d0000' -sf '#ffffff' -p "Choose output:")
+        xrandr --output "$MAIN_MONITOR" --mode 1920x1080
+        xrandr --output "$output" --mode 1920x1080 --same-as "$MAIN_MONITOR"
+        sleep 1
         feh --bg-fill "$WALLPAPER_PATH";;
 
     esac
