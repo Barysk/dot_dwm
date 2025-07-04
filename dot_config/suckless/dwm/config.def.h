@@ -93,7 +93,7 @@ static const char *multimedia_next[] = { "playerctl", "next", NULL };
 static const char *multimedia_previous[] = { "playerctl", "previous", NULL };
 
 /* multi monitor */
-static const char *connect_second_screen[] = { "/home/bk/.config/suckless/dwm/dwm_scripts/change_monitors", dmenufont, NULL };
+static const char *connect_second_screen[] = { "/home/bk/.config/suckless/dwm/dwm_scripts/change_monitors", dmenufont, col_black, col_white, col_red, col_white, NULL };
 
 /* lockscreen command */
 static const char *lock_screen[] = { "/home/bk/.config/suckless/dwm/dwm_scripts/lockscreen", NULL };

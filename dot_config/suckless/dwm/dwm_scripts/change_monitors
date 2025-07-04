@@ -21,36 +21,40 @@
 #   3. duplicate
 #
 
-# must be a variable
 dmenu_font="$1"
+nb="$2"
+nf="$3"
+sb="$4"
+sf="$5"
+update_wallpaper=1
 
-choice=$(echo -e "Reset\nExtend\nRedirect\nDuplicate" | dmenu -fn "$dmenu_font" -nb '#111111' -nf '#ffffff' -sb '#4d0000' -sf '#ffffff' -p "Select an action:")
+choice=$(echo -e "Reset\nExtend\nRedirect\nDuplicate" | dmenu -fn "$dmenu_font" -nb "$nb" -nf "$nf" -sb "$sb" -sf "$sf" -p "Select an action:")
 
 case "$choice" in
     "Reset")
         xrandr --auto
-        sleep 1
+        sleep "$update_wallpaper"
         feh --bg-fill "$WALLPAPER_PATH";;
 
     "Extend")
-        output=$(echo -e "HDMI-1\nDP-1\nVGA-1\nDP-2\nVGA-2" | dmenu  -fn "$dmenu_font" -nb '#111111' -nf '#ffffff' -sb '#4d0000' -sf '#ffffff' -p "Choose output:")
+        output=$(echo -e "HDMI-1\nDP-1\nVGA-1\nDP-2\nVGA-2" | dmenu  -fn "$dmenu_font" -nb "$nb" -nf "$nf" -sb "$sb" -sf "$sf" -p "Choose output:")
         xrandr --auto
         xrandr --output "$output" --preferred --right-of "$MAIN_MONITOR"
-        sleep 1
+        sleep "$update_wallpaper"
         feh --bg-fill "$WALLPAPER_PATH";;
 
     "Redirect")
-        output=$(echo -e "HDMI-1\nDP-1\nVGA-1\nDP-2\nVGA-2" | dmenu -fn "$dmenu_font" -nb '#111111' -nf '#ffffff' -sb '#4d0000' -sf '#ffffff' -p "Choose output:")
+        output=$(echo -e "HDMI-1\nDP-1\nVGA-1\nDP-2\nVGA-2" | dmenu -fn "$dmenu_font" -nb "$nb" -nf "$nf" -sb "$sb" -sf "$sf" -p "Choose output:")
         xrandr --output "$output" --preferred 
         xrandr --output "$MAIN_MONITOR" --off
-        sleep 1
+        sleep "$update_wallpaper"
         feh --bg-fill "$WALLPAPER_PATH";;
 
     "Duplicate")
-        output=$(echo -e "HDMI-1\nDP-1\nVGA-1\nDP-2\nVGA-2" | dmenu -fn "$dmenu_font" -nb '#111111' -nf '#ffffff' -sb '#4d0000' -sf '#ffffff' -p "Choose output:")
+        output=$(echo -e "HDMI-1\nDP-1\nVGA-1\nDP-2\nVGA-2" | dmenu -fn "$dmenu_font" -nb "$nb" -nf "$nf" -sb "$sb" -sf "$sf" -p "Choose output:")
         xrandr --output "$MAIN_MONITOR" --mode 1920x1080
         xrandr --output "$output" --mode 1920x1080 --same-as "$MAIN_MONITOR"
-        sleep 1
+        sleep "$update_wallpaper"
         feh --bg-fill "$WALLPAPER_PATH";;
 
     esac
