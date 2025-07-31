@@ -2,12 +2,6 @@
 # ~/.bashrc
 #
 
-export MAIN_MONITOR="eDP-1"
-export MAIN_MONITOR_MODE="1920x1080"
-export MAIN_MONITOR_RATE="60"
-
-export WALLPAPER_PATH="$HOME/.config/suckless/images/wallpaper/Touhou_Project/suika.jpg"
-
 export EDITOR="nvim"
 export TERMINAL="kitty"
 export BROWSER="brave"
