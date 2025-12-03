@@ -1,8 +1,8 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 0;        /* border pixel of windows */
-static const unsigned int gappx     = 8;        /* gaps between windows */
+static const unsigned int borderpx  = 1;        /* border pixel of windows */
+static const unsigned int gappx     = 0;        /* gaps between windows */
 static const unsigned int snap      = 0;       /* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft = 1;    /* 0: systray in the right corner, >0: systray on left of status text */
@@ -14,8 +14,8 @@ static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "M PLUS 2:size=9:bold" };
 static const char dmenufont[]       = "M PLUS 2:size=9:bold";
 
-static const char col_black[]		= "#111111";
-static const char col_red[]			= "#4d0000";
+static const char col_black[]       = "#111111";
+static const char col_red[]         = "#4d0000";
 static const char col_white[]       = "#ffffff";
 static const char *colors[][3]      = {
     /*               fg         bg         border   */
@@ -72,24 +72,24 @@ static const char *dmenucmd[] = {
     "-sf", col_white,
     NULL
 };
-static const char *termcmd[]  = { "kitty", NULL };
-static const char *explrcmd[]  = { "pcmanfm", NULL };
-static const char *browsercmd[]  = { "brave", NULL };
+static const char *termcmd[]      = { "kitty", NULL };
+static const char *explrcmd[]     = { "pcmanfm", NULL };
+static const char *browsercmd[]   = { "brave", NULL };
 static const char *telegramcmd[]  = { "Telegram", NULL };
 
 /* volume commands */
-static const char *volup[] = { "sh", "-c", "pactl set-sink-volume @DEFAULT_SINK@ +10% && kill -44 $(pidof dwmblocks)", NULL };
-static const char *voldown[] = { "sh", "-c", "pactl set-sink-volume @DEFAULT_SINK@ -10% && kill -44 $(pidof dwmblocks)", NULL };
+static const char *volup[]      = { "sh", "-c", "pactl set-sink-volume @DEFAULT_SINK@ +10% && kill -44 $(pidof dwmblocks)", NULL };
+static const char *voldown[]    = { "sh", "-c", "pactl set-sink-volume @DEFAULT_SINK@ -10% && kill -44 $(pidof dwmblocks)", NULL };
 static const char *mute_audio[] = { "sh", "-c", "pactl set-sink-mute @DEFAULT_SINK@ toggle && kill -44 $(pidof dwmblocks)", NULL };
 static const char *toggle_mic[] = { "pactl", "set-source-mute", "@DEFAULT_SOURCE@", "toggle", NULL };
 
 /* brightness commands */
 static const char *brightness_down[] = { "brightnessctl", "set", "10%-", NULL };
-static const char *brightness_up[] = { "brightnessctl", "set", "+10%", NULL };
+static const char *brightness_up[]   = { "brightnessctl", "set", "+10%", NULL };
 
 /* multimedia */
-static const char *multimedia_pause[] = { "playerctl", "play-pause", NULL };
-static const char *multimedia_next[] = { "playerctl", "next", NULL };
+static const char *multimedia_pause[]    = { "playerctl", "play-pause", NULL };
+static const char *multimedia_next[]     = { "playerctl", "next", NULL };
 static const char *multimedia_previous[] = { "playerctl", "previous", NULL };
 
 /* multi monitor */

@@ -10,13 +10,13 @@ export MAIN_MONITOR="eDP-1"
 export MAIN_MONITOR_MODE="1920x1080"
 export MAIN_MONITOR_RATE="60"
 
-export WALLPAPER_PATH="$HOME/.config/suckless/images/wallpaper/Touhou_Project/suika.jpg"
+export WALLPAPER_PATH="$HOME/.config/wallpapers/NieR_Theme/OrchestralArrangementAlbumCover.png"
 
 # Start applications on startup
 betterlockscreen -u "$WALLPAPER_PATH" --fx dimblur &
 feh --bg-fill "$WALLPAPER_PATH" &
 dwmblocks &
-picom &
+# picom &
 nm-applet &
 dunst &
 #redshift -t 5700:1000 -l 51:17 & #Latitude:Longitute of Wroclaw | Uncomment for automatic

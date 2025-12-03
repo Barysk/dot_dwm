@@ -13,7 +13,6 @@ This build uses:
     * fullgaps
     * pertag
     * systray
-    * warp
 * dwmblocks - same as slstatus but better
 * dmenu - application menu
 * kitty - terminal emulator
