@@ -6,7 +6,7 @@ export AWT_TOOLKIT=MToolkit
 
 export GTK_THEME="Materia-dark-compact"
 
-export MAIN_MONITOR="eDP-1"
+export MAIN_MONITOR="eDP"
 export MAIN_MONITOR_MODE="1920x1080"
 export MAIN_MONITOR_RATE="60"
 
@@ -22,8 +22,8 @@ dunst &
 #redshift -t 5700:1000 -l 51:17 & #Latitude:Longitute of Wroclaw | Uncomment for automatic
 
 # Initial settings
-setxkbmap qwerty-seine
-xrandr --output "$MAIN_MONITOR" --mode "$MAIN_MONITOR_MODE"  --rate "$MAIN_MONITOR_MODE"
+setxkbmap pl -variant legacy
+xrandr --output "$MAIN_MONITOR" --mode "$MAIN_MONITOR_MODE" --rate "$MAIN_MONITOR_MODE"
 
 # Turn off screen functions OFF
 xset s off

@@ -13,10 +13,12 @@ This build uses:
     * fullgaps
     * pertag
     * systray
+    * movestack
 * dwmblocks - same as slstatus but better
 * dmenu - application menu
 * kitty - terminal emulator
 * betterlockscreen - lockscreen
 * mpv - media player
-* picom - fancy graphics
+* picom - compositor
 * feh - wallpaper
+* flameshot - for screenshots

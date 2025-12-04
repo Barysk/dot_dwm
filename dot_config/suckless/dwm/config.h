@@ -1,3 +1,5 @@
+ #include "movestack.c"
+
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
@@ -11,8 +13,8 @@ static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display 
 static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "FOT-NewCezanne Pro DB:size=10:bold" };
-static const char dmenufont[]       = "FOT-NewCezanne Pro DB:size=10:bold";
+static const char *fonts[]          = { "M PLUS 2:size=9:bold" };
+static const char dmenufont[]       = "M PLUS 2:size=9:bold";
 
 static const char col_black[]       = "#111111";
 static const char col_red[]         = "#4d0000";
@@ -102,9 +104,6 @@ static const char *lock_screen[] = { "/home/bk/.config/suckless/dwm/dwm_scripts/
 /* screenshot */
 static const char *make_screenshot[] = { "flameshot", "gui", NULL };
 
-/* shutdown script | Uncoment if needed */
-//static const char *logout_cmd[] = { "~/.config/suckless/dwm/dwm_scripts/logout", NULL };
-
 /* change layout script */
 static const char *change_layout[] = { "/home/bk/.config/suckless/dwm/dwm_scripts/change_keyboard_layout", NULL };
 
@@ -118,6 +117,8 @@ static const Key keys[] = {
     { MODKEY|ShiftMask,             XK_b,       togglebar,      {0} },
     { MODKEY,                       XK_j,       focusstack,     {.i = +1 } },
     { MODKEY,                       XK_k,       focusstack,     {.i = -1 } },
+    { MODKEY|ShiftMask,             XK_j,       movestack,      {.i = +1 } },
+    { MODKEY|ShiftMask,             XK_k,       movestack,      {.i = -1 } },
     { MODKEY,                       XK_i,       incnmaster,     {.i = +1 } },
     { MODKEY,                       XK_d,       incnmaster,     {.i = -1 } },
     { MODKEY,                       XK_h,       setmfact,       {.f = -0.05} },
@@ -129,7 +130,6 @@ static const Key keys[] = {
     { MODKEY|ShiftMask,             XK_w,       setlayout,      {.v = &layouts[1]} },
     { MODKEY|ShiftMask,             XK_e,       setlayout,      {.v = &layouts[2]} },
     { MODKEY,                       XK_f,       togglefullscr,  {0} },
-//  { MODKEY,                       XK_space,   setlayout,      {0} }, // I don't use it
     { MODKEY,                       XK_0,       view,           {.ui = ~0 } },
     { MODKEY|ShiftMask,             XK_0,       tag,            {.ui = ~0 } },
     { MODKEY|ShiftMask,             XK_f,       togglefloating, {0} },
