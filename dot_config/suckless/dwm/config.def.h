@@ -3,7 +3,7 @@
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int gappx     = 0;        /* gaps between windows */
-static const unsigned int snap      = 0;       /* snap pixel */
+static const unsigned int snap      = 0;        /* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft = 1;    /* 0: systray in the right corner, >0: systray on left of status text */
 static const unsigned int systrayspacing = 0;   /* systray spacing */
@@ -11,16 +11,17 @@ static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display 
 static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "M PLUS 2:size=9:bold" };
-static const char dmenufont[]       = "M PLUS 2:size=9:bold";
+static const char *fonts[]          = { "FOT-NewCezanne Pro DB:size=10:bold" };
+static const char dmenufont[]       = "FOT-NewCezanne Pro DB:size=10:bold";
 
 static const char col_black[]       = "#111111";
 static const char col_red[]         = "#4d0000";
+static const char col_rose[]        = "#E42022";
 static const char col_white[]       = "#ffffff";
 static const char *colors[][3]      = {
     /*               fg         bg         border   */
     [SchemeNorm] = { col_white, col_black, col_black },
-    [SchemeSel]  = { col_white, col_red,  col_red  },
+    [SchemeSel]  = { col_white, col_red,   col_rose  },
 };
 
 /* tagging */
@@ -101,9 +102,6 @@ static const char *lock_screen[] = { "/home/bk/.config/suckless/dwm/dwm_scripts/
 /* screenshot */
 static const char *make_screenshot[] = { "flameshot", "gui", NULL };
 
-/* shutdown script | Uncoment if needed */
-//static const char *logout_cmd[] = { "~/.config/suckless/dwm/dwm_scripts/logout", NULL };
-
 /* change layout script */
 static const char *change_layout[] = { "/home/bk/.config/suckless/dwm/dwm_scripts/change_keyboard_layout", NULL };
 
@@ -128,7 +126,6 @@ static const Key keys[] = {
     { MODKEY|ShiftMask,             XK_w,       setlayout,      {.v = &layouts[1]} },
     { MODKEY|ShiftMask,             XK_e,       setlayout,      {.v = &layouts[2]} },
     { MODKEY,                       XK_f,       togglefullscr,  {0} },
-//  { MODKEY,                       XK_space,   setlayout,      {0} }, // I don't use it
     { MODKEY,                       XK_0,       view,           {.ui = ~0 } },
     { MODKEY|ShiftMask,             XK_0,       tag,            {.ui = ~0 } },
     { MODKEY|ShiftMask,             XK_f,       togglefloating, {0} },

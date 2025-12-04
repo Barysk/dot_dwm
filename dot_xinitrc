@@ -16,13 +16,13 @@ export WALLPAPER_PATH="$HOME/.config/wallpapers/NieR_Theme/OrchestralArrangement
 betterlockscreen -u "$WALLPAPER_PATH" --fx dimblur &
 feh --bg-fill "$WALLPAPER_PATH" &
 dwmblocks &
-# picom &
+picom &
 nm-applet &
 dunst &
 #redshift -t 5700:1000 -l 51:17 & #Latitude:Longitute of Wroclaw | Uncomment for automatic
 
 # Initial settings
-setxkbmap pl -variant legacy
+setxkbmap qwerty-seine
 xrandr --output "$MAIN_MONITOR" --mode "$MAIN_MONITOR_MODE"  --rate "$MAIN_MONITOR_MODE"
 
 # Turn off screen functions OFF
