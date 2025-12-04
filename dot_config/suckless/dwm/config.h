@@ -1,4 +1,4 @@
- #include "movestack.c"
+#include "movestack.c"
 
 /* See LICENSE file for copyright and license details. */
 
@@ -16,9 +16,9 @@ static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "M PLUS 2:size=9:bold" };
 static const char dmenufont[]       = "M PLUS 2:size=9:bold";
 
-static const char col_black[]       = "#111111";
+static const char col_black[]       = "#000000";
 static const char col_red[]         = "#4d0000";
-static const char col_rose[]        = "#E42022";
+static const char col_rose[]        = "#8d0000";
 static const char col_white[]       = "#ffffff";
 static const char *colors[][3]      = {
     /*               fg         bg         border   */
