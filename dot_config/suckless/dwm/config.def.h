@@ -7,7 +7,7 @@ static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int gappx     = 0;        /* gaps between windows */
 static const unsigned int snap      = 0;        /* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
-static const unsigned int systrayonleft = 1;    /* 0: systray in the right corner, >0: systray on left of status text */
+static const unsigned int systrayonleft  = 1;   /* 0: systray in the right corner, >0: systray on left of status text */
 static const unsigned int systrayspacing = 0;   /* systray spacing */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
 static const int showsystray        = 1;        /* 0 means no systray */
@@ -17,13 +17,13 @@ static const char *fonts[]          = { "M PLUS 2:size=9:bold" };
 static const char dmenufont[]       = "M PLUS 2:size=9:bold";
 
 static const char col_black[]       = "#000000";
-static const char col_red[]         = "#4d0000";
-static const char col_rose[]        = "#8d0000";
+static const char col_accent[]      = "#303030";
+static const char col_secondary[]   = "#707070";
 static const char col_white[]       = "#ffffff";
 static const char *colors[][3]      = {
-    /*               fg         bg         border   */
-    [SchemeNorm] = { col_white, col_black, col_black },
-    [SchemeSel]  = { col_white, col_red,   col_rose  },
+    /*               fg         bg          border        */
+    [SchemeNorm] = { col_white, col_black,  col_black     },
+    [SchemeSel]  = { col_white, col_accent, col_secondary },
 };
 
 /* tagging */
@@ -47,9 +47,13 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 
 static const Layout layouts[] = {
     /* symbol     arrange function */
-    { "タイル",        tile },    /* first entry is default */
-    { "フロート",      NULL },    /* no layout function means floating behavior */
-    { "メガネ",        monocle },
+    { "タイル",   tile },    /* first entry is default */
+    { "フロート", NULL },    /* no layout function means floating behavior */
+    { "メガネ",   monocle },
+    { "センター", centeredmaster },
+    { "トップ",   bstack },
+    // { ">M>",      centeredfloatingmaster },
+    // { "===",      bstackhoriz },
 };
 
 /* key definitions */
@@ -71,13 +75,13 @@ static const char *dmenucmd[] = {
     "-fn", dmenufont,
     "-nb", col_black,
     "-nf", col_white,
-    "-sb", col_red,
+    "-sb", col_accent,
     "-sf", col_white,
     NULL
 };
-static const char *termcmd[]      = { "kitty", NULL };
-static const char *explrcmd[]     = { "pcmanfm", NULL };
-static const char *browsercmd[]   = { "brave", NULL };
+static const char *termcmd[]      = { "kitty",    NULL };
+static const char *explrcmd[]     = { "pcmanfm",  NULL };
+static const char *browsercmd[]   = { "brave",    NULL };
 static const char *telegramcmd[]  = { "Telegram", NULL };
 
 /* volume commands */
@@ -96,7 +100,7 @@ static const char *multimedia_next[]     = { "playerctl", "next", NULL };
 static const char *multimedia_previous[] = { "playerctl", "previous", NULL };
 
 /* multi monitor */
-static const char *connect_second_screen[] = { "/home/bk/.config/suckless/dwm/dwm_scripts/change_monitors", dmenufont, col_black, col_white, col_red, col_white, NULL };
+static const char *connect_second_screen[] = { "/home/bk/.config/suckless/dwm/dwm_scripts/change_monitors", dmenufont, col_black, col_white, col_accent, col_white, NULL };
 
 /* lockscreen command */
 static const char *lock_screen[] = { "/home/bk/.config/suckless/dwm/dwm_scripts/lockscreen", NULL };
@@ -126,9 +130,13 @@ static const Key keys[] = {
     { MODKEY|ShiftMask,             XK_Return,  zoom,           {0} },
     { MODKEY,                       XK_Tab,     view,           {0} },
     { MODKEY,                       XK_q,       killclient,     {0} },
-    { MODKEY|ShiftMask,             XK_q,       setlayout,      {.v = &layouts[0]} },
-    { MODKEY|ShiftMask,             XK_w,       setlayout,      {.v = &layouts[1]} },
-    { MODKEY|ShiftMask,             XK_e,       setlayout,      {.v = &layouts[2]} },
+    { MODKEY|ControlMask,           XK_h,       setlayout,      {.v = &layouts[0]} },
+    { MODKEY|ControlMask,           XK_f,       setlayout,      {.v = &layouts[1]} },
+    { MODKEY|ControlMask,           XK_m,       setlayout,      {.v = &layouts[2]} },
+    { MODKEY|ControlMask,           XK_c,       setlayout,      {.v = &layouts[3]} },
+    { MODKEY|ControlMask,           XK_k,       setlayout,      {.v = &layouts[4]} },
+    // { MODKEY|ControlMask,             XK_o,       setlayout,      {.v = &layouts[5]} },
+    // { MODKEY|ControlMask,             XK_o,       setlayout,      {.v = &layouts[6]} },
     { MODKEY,                       XK_f,       togglefullscr,  {0} },
     { MODKEY,                       XK_0,       view,           {.ui = ~0 } },
     { MODKEY|ShiftMask,             XK_0,       tag,            {.ui = ~0 } },

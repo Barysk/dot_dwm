@@ -13,5 +13,5 @@ static const Block blocks[] = {
 // *US - Update Signal
 
 //sets delimiter between status commands. NULL character ('\0') means no delimiter.
-static char delim[] = " ";
-static unsigned int delimLen = 8;
+static char delim[] = "  ";
+static unsigned int delimLen = sizeof(delim);

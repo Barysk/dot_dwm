@@ -1,4 +1,14 @@
 #!/bin/bash
 
 battery="$(cat /sys/class/power_supply/BAT0/capacity)"
-echo "Bat ${battery}"
+suffix=""
+
+if   [ "$battery" -lt 10 ]; then
+    suffix=" (!!!)"
+elif [ "$battery" -lt 25 ]; then
+    suffix=" (!!)"
+elif [ "$battery" -lt 50 ]; then
+    suffix=" (!)"
+fi
+
+echo "Bat ${battery}%${suffix}"
