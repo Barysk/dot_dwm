@@ -17,8 +17,8 @@ static const char *fonts[]          = { "M PLUS 2:size=9:bold" };
 static const char dmenufont[]       = "M PLUS 2:size=9:bold";
 
 static const char col_black[]       = "#000000";
-static const char col_accent[]      = "#303030";
-static const char col_secondary[]   = "#707070";
+static const char col_accent[]      = "#333333";
+static const char col_secondary[]   = "#777777";
 static const char col_white[]       = "#ffffff";
 static const char *colors[][3]      = {
     /*               fg         bg          border        */
@@ -47,11 +47,11 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 
 static const Layout layouts[] = {
     /* symbol     arrange function */
-    { "タイル",   tile },    /* first entry is default */
-    { "フロート", NULL },    /* no layout function means floating behavior */
-    { "メガネ",   monocle },
-    { "センター", centeredmaster },
-    { "トップ",   bstack },
+    { "[タイル]",   tile },    /* first entry is default */
+    { "[フロート]", NULL },    /* no layout function means floating behavior */
+    { "[メガネ]",   monocle },
+    { "[センター]", centeredmaster },
+    { "[トップ]",   bstack },
     // { ">M>",      centeredfloatingmaster },
     // { "===",      bstackhoriz },
 };
@@ -112,67 +112,67 @@ static const char *make_screenshot[] = { "flameshot", "gui", NULL };
 static const char *change_layout[] = { "/home/bk/.config/suckless/dwm/dwm_scripts/change_keyboard_layout", NULL };
 
 static const Key keys[] = {
-    /* modifier                     key         function        argument */
-    { MODKEY,                       XK_p,       spawn,          {.v = dmenucmd } },
-    { MODKEY,                       XK_Return,  spawn,          {.v = termcmd } },
-    { MODKEY,                       XK_e,       spawn,          {.v = explrcmd } },
-    { MODKEY,                       XK_t,       spawn,          {.v = telegramcmd } },
-    { MODKEY,                       XK_b,       spawn,          {.v = browsercmd } },
-    { MODKEY|ShiftMask,             XK_b,       togglebar,      {0} },
-    { MODKEY,                       XK_j,       focusstack,     {.i = +1 } },
-    { MODKEY,                       XK_k,       focusstack,     {.i = -1 } },
-    { MODKEY|ShiftMask,             XK_j,       movestack,      {.i = +1 } },
-    { MODKEY|ShiftMask,             XK_k,       movestack,      {.i = -1 } },
-    { MODKEY,                       XK_i,       incnmaster,     {.i = +1 } },
-    { MODKEY,                       XK_d,       incnmaster,     {.i = -1 } },
-    { MODKEY,                       XK_h,       setmfact,       {.f = -0.05} },
-    { MODKEY,                       XK_l,       setmfact,       {.f = +0.05} },
-    { MODKEY|ShiftMask,             XK_Return,  zoom,           {0} },
-    { MODKEY,                       XK_Tab,     view,           {0} },
-    { MODKEY,                       XK_q,       killclient,     {0} },
-    { MODKEY|ControlMask,           XK_h,       setlayout,      {.v = &layouts[0]} },
-    { MODKEY|ControlMask,           XK_f,       setlayout,      {.v = &layouts[1]} },
-    { MODKEY|ControlMask,           XK_m,       setlayout,      {.v = &layouts[2]} },
-    { MODKEY|ControlMask,           XK_c,       setlayout,      {.v = &layouts[3]} },
-    { MODKEY|ControlMask,           XK_k,       setlayout,      {.v = &layouts[4]} },
-    // { MODKEY|ControlMask,             XK_o,       setlayout,      {.v = &layouts[5]} },
-    // { MODKEY|ControlMask,             XK_o,       setlayout,      {.v = &layouts[6]} },
-    { MODKEY,                       XK_f,       togglefullscr,  {0} },
-    { MODKEY,                       XK_0,       view,           {.ui = ~0 } },
-    { MODKEY|ShiftMask,             XK_0,       tag,            {.ui = ~0 } },
-    { MODKEY|ShiftMask,             XK_f,       togglefloating, {0} },
-    { MODKEY,                       XK_comma,   focusmon,       {.i = -1 } },
-    { MODKEY,                       XK_period,  focusmon,       {.i = +1 } },
-    { MODKEY|ShiftMask,             XK_comma,   tagmon,         {.i = -1 } },
-    { MODKEY|ShiftMask,             XK_period,  tagmon,         {.i = +1 } },
-    { MODKEY,                       XK_minus,   setgaps,        {.i = -1 } },
-    { MODKEY,                       XK_equal,   setgaps,        {.i = +1 } },
-    { MODKEY|ShiftMask,             XK_equal,   setgaps,        {.i = 0  } },
-    { MODKEY,                       XK_space,   spawn,          {.v = multimedia_pause  } },
-    { MODKEY,                       XK_Down,    spawn,          {.v = multimedia_pause  } },
-    { MODKEY,                       XK_Right,   spawn,          {.v = multimedia_next  } },
-    { MODKEY,                       XK_Left,    spawn,          {.v = multimedia_previous  } },
-    { 0,                            0x1008ff02, spawn,          {.v = brightness_up } },    // brightness up
-    { 0,                            0x1008ff03, spawn,          {.v = brightness_down } },  // brightness down
-    { MODKEY,                       XK_Escape,  spawn,          {.v = lock_screen } },      // screen lock
-    { MODKEY|ShiftMask,             XK_s,       spawn,          {.v = make_screenshot} },   // screenshot
-    { 0,                            0x1008ff59, spawn,          {.v = connect_second_screen } },    // second screen
-    { 0,                            0x1008ff13, spawn,          {.v = volup } },        // volume up
-    { 0,                            0x1008ff11, spawn,          {.v = voldown } },      // volume down
-    { 0,                            0x1008ff12, spawn,          {.v = mute_audio } },   // mute button
-    { 0,                            0x1008ffb2, spawn,          {.v = toggle_mic } },   // mute source
-    { Mod1Mask,                     XK_Shift_L, spawn,          {.v = change_layout } },// Alt + Shift, Keyboard layout change
-//  { 0,                            0x1008ff2a, spawn,          {.v = logout_cmd } },   // power off button // Add if needed
-    TAGKEYS(                        XK_1,                       0)
-    TAGKEYS(                        XK_2,                       1)
-    TAGKEYS(                        XK_3,                       2)
-    TAGKEYS(                        XK_4,                       3)
-    TAGKEYS(                        XK_5,                       4)
-    TAGKEYS(                        XK_6,                       5)
-    TAGKEYS(                        XK_7,                       6)
-    TAGKEYS(                        XK_8,                       7)
-    TAGKEYS(                        XK_9,                       8)
-    { MODKEY|ShiftMask,             XK_Escape,  quit,           {0} },
+    /* modifier                     key          function        argument */
+    { MODKEY,                       XK_p,        spawn,          {.v = dmenucmd } },
+    { MODKEY,                       XK_Return,   spawn,          {.v = termcmd } },
+    { MODKEY,                       XK_e,        spawn,          {.v = explrcmd } },
+    { MODKEY,                       XK_t,        spawn,          {.v = telegramcmd } },
+    { MODKEY,                       XK_b,        spawn,          {.v = browsercmd } },
+    { MODKEY|ShiftMask,             XK_b,        togglebar,      {0} },
+    { MODKEY,                       XK_j,        focusstack,     {.i = +1 } },
+    { MODKEY,                       XK_k,        focusstack,     {.i = -1 } },
+    { MODKEY|ShiftMask,             XK_j,        movestack,      {.i = +1 } },
+    { MODKEY|ShiftMask,             XK_k,        movestack,      {.i = -1 } },
+    { MODKEY,                       XK_i,        incnmaster,     {.i = +1 } },
+    { MODKEY,                       XK_d,        incnmaster,     {.i = -1 } },
+    { MODKEY,                       XK_h,        setmfact,       {.f = -0.05} },
+    { MODKEY,                       XK_l,        setmfact,       {.f = +0.05} },
+    { MODKEY|ShiftMask,             XK_Return,   zoom,           {0} },
+    { MODKEY,                       XK_Tab,      view,           {0} },
+    { MODKEY,                       XK_q,        killclient,     {0} },
+    { MODKEY|ControlMask,           XK_h,        setlayout,      {.v = &layouts[0]} },
+    { MODKEY|ControlMask,           XK_f,        setlayout,      {.v = &layouts[1]} },
+    { MODKEY|ControlMask,           XK_m,        setlayout,      {.v = &layouts[2]} },
+    { MODKEY|ControlMask,           XK_c,        setlayout,      {.v = &layouts[3]} },
+    { MODKEY|ControlMask,           XK_k,        setlayout,      {.v = &layouts[4]} },
+    // { MODKEY|ControlMask,             XK_o,        setlayout,      {.v = &layouts[5]} },
+    // { MODKEY|ControlMask,             XK_o,        setlayout,      {.v = &layouts[6]} },
+    { MODKEY,                       XK_f,        togglefullscr,  {0} },
+    { MODKEY,                       XK_asterisk, view,           {.ui = ~0 } },
+    { MODKEY|ShiftMask,             XK_asterisk, tag,            {.ui = ~0 } },
+    { MODKEY|ShiftMask,             XK_f,        togglefloating, {0} },
+    { MODKEY,                       XK_comma,    focusmon,       {.i = -1 } },
+    { MODKEY,                       XK_period,   focusmon,       {.i = +1 } },
+    { MODKEY|ShiftMask,             XK_comma,    tagmon,         {.i = -1 } },
+    { MODKEY|ShiftMask,             XK_period,   tagmon,         {.i = +1 } },
+    { MODKEY,                       XK_minus,    setgaps,        {.i = -1 } },
+    { MODKEY,                       XK_equal,    setgaps,        {.i = +1 } },
+    { MODKEY|ShiftMask,             XK_equal,    setgaps,        {.i = 0  } },
+    { MODKEY,                       XK_space,    spawn,          {.v = multimedia_pause  } },
+    { MODKEY,                       XK_Down,     spawn,          {.v = multimedia_pause  } },
+    { MODKEY,                       XK_Right,    spawn,          {.v = multimedia_next  } },
+    { MODKEY,                       XK_Left,     spawn,          {.v = multimedia_previous  } },
+    { 0,                            0x1008ff02,  spawn,          {.v = brightness_up } },    // brightness up
+    { 0,                            0x1008ff03,  spawn,          {.v = brightness_down } },  // brightness down
+    { MODKEY,                       XK_Escape,   spawn,          {.v = lock_screen } },      // screen lock
+    { MODKEY|ShiftMask,             XK_s,        spawn,          {.v = make_screenshot} },   // screenshot
+    { 0,                            0x1008ff59,  spawn,          {.v = connect_second_screen } },    // second screen
+    { 0,                            0x1008ff13,  spawn,          {.v = volup } },        // volume up
+    { 0,                            0x1008ff11,  spawn,          {.v = voldown } },      // volume down
+    { 0,                            0x1008ff12,  spawn,          {.v = mute_audio } },   // mute button
+    { 0,                            0x1008ffb2,  spawn,          {.v = toggle_mic } },   // mute source
+    { Mod1Mask,                     XK_Shift_L,  spawn,          {.v = change_layout } },// Alt + Shift, Keyboard layout change
+//  { 0,                            0x1008ff2a,  spawn,          {.v = logout_cmd } },   // power off button // Add if needed
+    TAGKEYS(                        XK_plus,                     0)
+    TAGKEYS(                        XK_bracketleft,              1)
+    TAGKEYS(                        XK_braceleft,                2)
+    TAGKEYS(                        XK_parenleft,                3)
+    TAGKEYS(                        XK_ampersand,                4)
+    TAGKEYS(                        XK_asciicircum,              5)
+    TAGKEYS(                        XK_parenright,               6)
+    TAGKEYS(                        XK_braceright,               7)
+    TAGKEYS(                        XK_bracketright,             8)
+    { MODKEY|ShiftMask,             XK_Escape,  quit,            {0} },
 };
 
 /* button definitions */

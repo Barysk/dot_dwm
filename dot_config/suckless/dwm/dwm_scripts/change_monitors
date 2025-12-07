@@ -1,61 +1,68 @@
 #!/bin/bash
 
-#
-# This will be a script for choosing output screen
-# Probably I should to add option for choosing output (ex. DP-1 or DP-2)
-#
-# Choose what to do:
-#
-#   1. extend
-#       1. DP-1
-#       2. VGA-1
-#       3. DP-2
-#       4. VGA-2
-#
-#   2. redirect output
-#       1. DP-1
-#       2. VGA-1
-#       3. DP-2
-#       4. VGA-2
-#
-#   3. duplicate
-#
+automatic_output () {
+	xrandr --auto
+	sleep "$update_wallpaper_timer"
+	feh --bg-fill "$WALLPAPER_PATH"
+}
+
+extend_output () {
+	output=$(xrandr | grep " connected" | awk '{print $1}' | dmenu  -fn "$dmenu_font" -nb "$nb" -nf "$nf" -sb "$sb" -sf "$sf" -p "Choose output:")
+	location=$(echo -e "--right-of\n--left-of\n--above\n--below" | dmenu  -fn "$dmenu_font" -nb "$nb" -nf "$nf" -sb "$sb" -sf "$sf" -p "Choose location:")
+	xrandr --auto
+	xrandr --output "$output" --preferred "$location" "$MAIN_MONITOR"
+	sleep "$update_wallpaper_timer"
+	feh --bg-fill "$WALLPAPER_PATH"
+}
+
+redirect_output () {
+	output=$(xrandr | grep " connected" | awk '{print $1}' | dmenu  -fn "$dmenu_font" -nb "$nb" -nf "$nf" -sb "$sb" -sf "$sf" -p "Choose output:")
+	xrandr --output "$output" --preferred 
+	xrandr --output "$MAIN_MONITOR" --off
+	sleep "$update_wallpaper_timer"
+	feh --bg-fill "$WALLPAPER_PATH"
+}
+
+mirror_output () {
+	output=$(xrandr | grep " connected" | awk '{print $1}' | dmenu  -fn "$dmenu_font" -nb "$nb" -nf "$nf" -sb "$sb" -sf "$sf" -p "Choose output:")
+	xrandr --output "$MAIN_MONITOR" --mode "$MAIN_MONITOR_MODE"
+	xrandr --output "$output" --mode "$MAIN_MONITOR_MODE" --same-as "$MAIN_MONITOR"
+	sleep "$update_wallpaper_timer"
+	feh --bg-fill "$WALLPAPER_PATH"
+}
+
+################################################################################
 
 dmenu_font="$1"
 nb="$2"
 nf="$3"
 sb="$4"
 sf="$5"
-update_wallpaper=1
 
-choice=$(echo -e "Reset\nExtend\nRedirect\nDuplicate" | dmenu -fn "$dmenu_font" -nb "$nb" -nf "$nf" -sb "$sb" -sf "$sf" -p "Select an action:")
+update_wallpaper_timer=1
+
+# --left-of, --right-of, --above, --below
+location="right-of"
+
+choice=$(echo -e "Auto\nExtend\nRedirect\nMirror" | dmenu -fn "$dmenu_font" -nb "$nb" -nf "$nf" -sb "$sb" -sf "$sf" -p "Select an action:")
 
 case "$choice" in
-    "Reset")
-        xrandr --auto
-        sleep "$update_wallpaper"
-        feh --bg-fill "$WALLPAPER_PATH";;
+	"Auto") automatic_output;;
+	"Extend") extend_output;;
+	"Redirect") redirect_output;;
+	"Mirror") mirror_output;;
+esac
 
-    "Extend")
-        output=$(echo -e "HDMI-1\nDP-1\nVGA-1\nDP-2\nVGA-2" | dmenu  -fn "$dmenu_font" -nb "$nb" -nf "$nf" -sb "$sb" -sf "$sf" -p "Choose output:")
-        xrandr --auto
-        xrandr --output "$output" --preferred --right-of "$MAIN_MONITOR"
-        sleep "$update_wallpaper"
-        feh --bg-fill "$WALLPAPER_PATH";;
 
-    "Redirect")
-        output=$(echo -e "HDMI-1\nDP-1\nVGA-1\nDP-2\nVGA-2" | dmenu -fn "$dmenu_font" -nb "$nb" -nf "$nf" -sb "$sb" -sf "$sf" -p "Choose output:")
-        xrandr --output "$output" --preferred 
-        xrandr --output "$MAIN_MONITOR" --off
-        sleep "$update_wallpaper"
-        feh --bg-fill "$WALLPAPER_PATH";;
-
-    "Duplicate")
-        output=$(echo -e "HDMI-1\nDP-1\nVGA-1\nDP-2\nVGA-2" | dmenu -fn "$dmenu_font" -nb "$nb" -nf "$nf" -sb "$sb" -sf "$sf" -p "Choose output:")
-        xrandr --output "$MAIN_MONITOR" --mode 1920x1080
-        xrandr --output "$output" --mode 1920x1080 --same-as "$MAIN_MONITOR"
-        sleep "$update_wallpaper"
-        feh --bg-fill "$WALLPAPER_PATH";;
-
-    esac
-
+# BRSKv3 License
+#
+# You are allowed to use, modify, and share this code as long as your intentions
+# are good. This permission does not apply to harmful, dishonest, exploitative,
+# or malicious use of any kind.
+#
+# In addition, by using, modifying, or sharing this code, you agree to read and
+# think about living according to the "Instruments of Good Works" found in
+# Chapter 4 of The Rule of St. Benedict. You do not have to follow them, but you
+# are asked to take them seriously and consider their guidance.
+#
+# 2025-12-07 -- bk

@@ -12,7 +12,6 @@ export BROWSER="brave"
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias nv='nvim .'
-# alias startw='uwsm start default'
 
 alias archwiki="$BROWSER /usr/share/doc/arch-wiki/html/en/Main_page.html"
 

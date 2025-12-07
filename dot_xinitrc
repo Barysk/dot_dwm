@@ -22,7 +22,7 @@ dunst &
 #redshift -t 5700:1000 -l 51:17 & #Latitude:Longitute of Wroclaw | Uncomment for automatic
 
 # Initial settings
-setxkbmap pl -variant legacy
+setxkbmap qwerty-seine
 xrandr --output "$MAIN_MONITOR" --mode "$MAIN_MONITOR_MODE" --rate "$MAIN_MONITOR_MODE"
 
 # Turn off screen functions OFF

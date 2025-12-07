@@ -11,4 +11,4 @@ elif [ "$battery" -lt 50 ]; then
     suffix=" (!)"
 fi
 
-echo "Bat ${battery}%${suffix}"
+echo "Bat ${battery}${suffix}"
