@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+
+monitor="$1"
+dmenu_font="$2"
+nb="$3"
+nf="$4"
+sb="$5"
+sf="$6"
+
+j4-dmenu-desktop -d "dmenu -i -m $monitor -fn '$dmenu_font' -nb '$nb' -nf '$nf' -sb '$sb' -sf '$sf'"
+

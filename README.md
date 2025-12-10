@@ -7,18 +7,36 @@ An example of how this config looks
 
 This build uses:
 * dwm - window manager
+    * activemonitor
     * actualfullscreen
     * alwayscenter
     * attachaside
+    * bottomstack
+    * centerstack
     * fullgaps
-    * pertag
-    * systray
     * movestack
+    * pertag_with_sel
+    * staticstatus
+    * systray
 * dwmblocks - same as slstatus but better
 * dmenu - application menu
+* j4-dmenu-desktop - wraper for dmenu
 * kitty - terminal emulator
 * betterlockscreen - lockscreen
 * mpv - media player
 * picom - compositor
 * feh - wallpaper
 * flameshot - for screenshots
+
+also applyed this to make borders non-transparent:
+drw.c
+```
+	if (!XftColorAllocName(drw->dpy, DefaultVisual(drw->dpy, drw->screen),
+	                       DefaultColormap(drw->dpy, drw->screen),
+	                       clrname, dest))
+		die("error, cannot allocate color '%s'", clrname);
++
++	dest->pixel |= 0xff << 24;
+}
+}
+```

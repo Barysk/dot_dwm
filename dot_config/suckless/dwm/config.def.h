@@ -1,30 +1,36 @@
 #include "movestack.c"
 
-/* See LICENSE file for copyright and license details. */
+#define FONT          "M PLUS 2:size=9:bold"
+#define COL_BLACK     "#000000"
+#define COL_ACCENT    "#333333"
+#define COL_SECONDARY "#777777"
+#define COL_WHITE     "#ffffff"
 
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int gappx     = 0;        /* gaps between windows */
 static const unsigned int snap      = 0;        /* snap pixel */
-static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
+static const unsigned int systraypinning = 1;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft  = 1;   /* 0: systray in the right corner, >0: systray on left of status text */
 static const unsigned int systrayspacing = 0;   /* systray spacing */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
 static const int showsystray        = 1;        /* 0 means no systray */
+static const int statmonval         = 0;        /* staticstatus */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "M PLUS 2:size=9:bold" };
-static const char dmenufont[]       = "M PLUS 2:size=9:bold";
+static const char *fonts[]          = { FONT };
+static const char dmenufont[]       = FONT;
 
-static const char col_black[]       = "#000000";
-static const char col_accent[]      = "#333333";
-static const char col_secondary[]   = "#777777";
-static const char col_white[]       = "#ffffff";
+static const char col_black[]       = COL_BLACK;
+static const char col_accent[]      = COL_ACCENT;
+static const char col_secondary[]   = COL_SECONDARY;
+static const char col_white[]       = COL_WHITE;
 static const char *colors[][3]      = {
     /*               fg         bg          border        */
     [SchemeNorm] = { col_white, col_black,  col_black     },
     [SchemeSel]  = { col_white, col_accent, col_secondary },
 };
+
 
 /* tagging */
 static const char *tags[] = { "一", "二", "三", "四", "五", "六", "七", "八", "九" };
@@ -69,16 +75,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = {
-    "dmenu_run",
-    "-m", dmenumon,
-    "-fn", dmenufont,
-    "-nb", col_black,
-    "-nf", col_white,
-    "-sb", col_accent,
-    "-sf", col_white,
-    NULL
-};
+static const char *dmenucmd[]     = { "/home/bk/.config/suckless/dwm/dwm_scripts/dmenu_wrapper", dmenumon, FONT, COL_BLACK, COL_WHITE, COL_ACCENT, COL_WHITE, NULL };
 static const char *termcmd[]      = { "kitty",    NULL };
 static const char *explrcmd[]     = { "pcmanfm",  NULL };
 static const char *browsercmd[]   = { "brave",    NULL };
