@@ -16,7 +16,7 @@ This build uses:
     * fullgaps
     * movestack
     * pertag_with_sel
-    * staticstatus
+    * statusallmons
     * systray
 * dwmblocks - same as slstatus but better
 * dmenu - application menu

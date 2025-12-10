@@ -4,9 +4,3 @@ layout=$(echo "$layout_info" | grep layout | awk '{print $2}')
 variant=$(echo "$layout_info" | grep variant | awk '{print $2}')
 
 echo "$layout"
-
-# if [ -n "$variant" ]; then
-#     echo "$layout($variant)"
-# else
-#     echo "$layout"
-# fi

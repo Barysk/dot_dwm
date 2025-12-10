@@ -6,18 +6,8 @@ vol=$(echo "$vol_info" | awk '{print $2*100}' | awk '{printf "%.0f", $1}')
 mute_status=$(echo "$vol_info" | grep -o 'MUTED')
 
 if [ -n "$mute_status" ]; then
-    echo "VolX${vol}"
+    echo "消音 ${vol}"
 else
-    echo "Vol ${vol}"
+    echo "音量 ${vol}"
 fi
 
-## pulseaudio
-#vol_info="$(amixer get Master | tail -n1)"
-#vol="$(echo "$vol_info" | sed -r 's/.*\[(.*)%\].*/\1/')"
-#mute_status="$(echo "$vol_info" | grep -o '\[off\]')"
-#
-#if [ -n "$mute_status" ]; then
-#    echo "VolX${vol}%"
-#else
-#    echo "Vol ${vol}%"
-#fi
