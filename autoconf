@@ -43,7 +43,6 @@ collect ()
 	cp -rf $HOME/.config/wallpapers       ./dot_config/
 	cp -rf $HOME/.config/xkb              ./dot_config/
 	cp -rf $HOME/.config/zathura          ./dot_config/
-	cp -rf $HOME/.config/map_tablet.bash  ./dot_config/
 	echo 'All done'
 }
 
