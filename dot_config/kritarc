@@ -2,13 +2,13 @@ AlsoSaveAsKra=false
 AntialiasSelectionOutline=false
 ArtColorSel.ColorSpace=0
 ArtColorSel.InversedSaturation=false
-ArtColorSel.Light=0.28098534246805873
+ArtColorSel.Light=0.33983339868042134
 ArtColorSel.LightPieces=11
 ArtColorSel.NumRings=7
 ArtColorSel.RingPieces=12
 ArtColorSel.SelColorH=0
 ArtColorSel.SelColorS=0
-ArtColorSel.SelColorX=0.28098534246805873
+ArtColorSel.SelColorX=0.33983339868042134
 ArtColorSel.defaultHueSteps=12
 ArtColorSel.defaultSaturationSteps=7
 ArtColorSel.defaultValueScaleSteps=11
@@ -29,13 +29,13 @@ ConvertToImageColorSpaceOnImport=false
 CreateBackupFile=true
 ExportConfiguration-image/jpeg=<!DOCTYPE params>\n<params>\n <param type="internal" name="baseline">true</param>\n <param type="internal" name="exif">true</param>\n <param type="string" name="filters"><![CDATA[]]></param>\n <param type="internal" name="forceSRGB">false</param>\n <param type="internal" name="iptc">true</param>\n <param type="internal" name="optimize">true</param>\n <param type="internal" name="progressive">false</param>\n <param type="internal" name="quality">100</param>\n <param type="internal" name="saveProfile">true</param>\n <param type="internal" name="smoothing">0</param>\n <param type="internal" name="storeAuthor">false</param>\n <param type="internal" name="storeMetaData">false</param>\n <param type="internal" name="subsampling">3</param>\n <param type="color" name="transparencyFillcolor"><![CDATA[<!DOCTYPE color>\n<color>\n <RGB space="sRGB-elle-V2-srgbtrc.icc" r="0" b="0" g="0"/>\n</color>\n]]></param>\n <param type="internal" name="xmp">true</param>\n</params>\n
 ExportConfiguration-image/png=<!DOCTYPE params>\n<params>\n <param type="internal" name="alpha">true</param>\n <param type="internal" name="compression">1</param>\n <param type="internal" name="downsample">false</param>\n <param type="internal" name="forceSRGB">true</param>\n <param type="internal" name="indexed">false</param>\n <param type="internal" name="interlaced">false</param>\n <param type="internal" name="saveAsHDR">false</param>\n <param type="internal" name="saveSRGBProfile">false</param>\n <param type="internal" name="storeAuthor">false</param>\n <param type="internal" name="storeMetaData">false</param>\n <param type="color" name="transparencyFillcolor"><![CDATA[<!DOCTYPE color>\n<color>\n <RGB g="1" b="1" space="sRGB-elle-V2-g10.icc" r="1"/>\n</color>\n]]></param>\n</params>\n
-FilterSelector/LastUsedFilter=perchannel
+FilterSelector/LastUsedFilter=blur
 GamutMasks.viewMode=0
 KineticScrollingEnabled=true
 KineticScrollingGesture=2
 KineticScrollingHideScrollbar=false
 KineticScrollingSensitivity=75
-KisDlgPreferences/CurrentPage=display
+KisDlgPreferences/CurrentPage=shortcuts
 Krita/Ocio/DisplayDevice=sRGB
 Krita/Ocio/DisplayLook=None
 Krita/Ocio/DisplayView=Raw
@@ -45,10 +45,10 @@ Krita/Ocio/OcioConfigPath=
 Krita/Ocio/OcioLockColorVisualRepresentation=false
 Krita/Ocio/OcioLutPath=
 Krita/Ocio/UseOcio=false
-LastBackGroundColor=<!DOCTYPE LastBackGroundColor>\n<LastBackGroundColor>\n <RGB r="0" space="sRGB-elle-V2-srgbtrc.icc" g="0" b="0"/>\n</LastBackGroundColor>\n
-LastForeGroundColor=<!DOCTYPE LastForeGroundColor>\n<LastForeGroundColor>\n <RGB r="0.274509817361832" space="sRGB-elle-V2-srgbtrc.icc" g="0.274509817361832" b="0.274509817361832"/>\n</LastForeGroundColor>\n
-LastPreset=Ink tilt 10
-LastPreset_-1=Ink tilt 10
+LastBackGroundColor=<!DOCTYPE LastBackGroundColor>\n<LastBackGroundColor>\n <RGB b="0" g="0" space="sRGB-elle-V2-srgbtrc.icc" r="0"/>\n</LastBackGroundColor>\n
+LastForeGroundColor=<!DOCTYPE LastForeGroundColor>\n<LastForeGroundColor>\n <RGB b="0.337254911661148" g="0.337254911661148" space="sRGB-elle-V2-srgbtrc.icc" r="0.337254911661148"/>\n</LastForeGroundColor>\n
+LastPreset=b) Basic-6 Details
+LastPreset_-1=b) Basic-6 Details
 LineSmoothingDelayDistance=50
 LineSmoothingDistance=50
 LineSmoothingFinishStabilizedCurve=true
@@ -119,7 +119,7 @@ enableProgressReporting=true
 eraserCursorMaincColor=128,255,128
 eraserCursorStyle=9
 eraserOutlineStyle=2
-filterdialog/geometry=\x01\xd9\xd0\xcb\x00\x03\x00\x00\x00\x00\x0b\x12\x00\x00\x01\xc7\x00\x00\x0eC\x00\x00\x03\xb8\x00\x00\x0b\x13\x00\x00\x01\xc8\x00\x00\x0eB\x00\x00\x03\xb7\x00\x00\x00\x01\x00\x00\x00\x00\x07\x80\x00\x00\x0b\x13\x00\x00\x01\xc8\x00\x00\x0eB\x00\x00\x03\xb7
+filterdialog/geometry=\x01\xd9\xd0\xcb\x00\x03\x00\x00\x00\x00\t\xa7\x00\x00\x01#\x00\x00\x0c\xd8\x00\x00\x03\x14\x00\x00\t\xa8\x00\x00\x01$\x00\x00\x0c\xd7\x00\x00\x03\x13\x00\x00\x00\x01\x00\x00\x00\x00\x07\x80\x00\x00\t\xa8\x00\x00\x01$\x00\x00\x0c\xd7\x00\x00\x03\x13
 filterdialog/rememberlastpreset=false
 forceAlwaysFullSizedEraserOutline=false
 forceAlwaysFullSizedOutline=false
@@ -165,7 +165,7 @@ logviewer_enabled=false
 maxAllowedSpeedValue=30
 maxSwapSize=4096
 maximumBrushSize=1000
-mdiBackgroundColorXML=<!DOCTYPE color>\n<color channeldepth="U8">\n <RGB b="0.301960796117783" r="0.301960796117783" space="sRGB-elle-V2-srgbtrc.icc" g="0.301960796117783"/>\n</color>\n
+mdiBackgroundColorXML=<!DOCTYPE color>\n<color channeldepth="U8">\n <RGB b="0.301960796117783" g="0.301960796117783" space="sRGB-elle-V2-srgbtrc.icc" r="0.301960796117783"/>\n</color>\n
 mdiBackgroundImage=
 mdi_rubberband=1
 mdi_viewmode=1
@@ -242,7 +242,7 @@ popuppalette/useDynamicSlotCount=true
 popuppalette/usevisualcolorselector=false
 presetChooserViewMode=1
 presetIconSize=30
-presethistory=Ink tilt 20,Ink tilt 10,b) Basic-6 Details,a) Eraser Small,a) Eraser Soft,b) Basic-5 Size Opacity,b) Basic-5 Size,b) Basic-4 Flow Opacity,b) Basic-1,a) Eraser Circle
+presethistory=d) Ink-1 Precision,d) Ink-4 Pen Rough,d) Ink-3 Gpen,Ink circle 10,d) Ink pen (mypaint),Ink brush 25,b) Basic-6 Details,b) Basic-5 Size,ink precision 03,Ink tilt 20
 renameMergedLayers=true
 renamePastedLayers=true
 renderIntent=0
@@ -286,7 +286,7 @@ zoomSteps=2
 [File Dialogs]
 DontUseNativeFileDialog=true
 Open Palette=/home/bk/Pictures/palletes
-OpenDocument=/home/bk/Pictures/my_tinkering_with_krita/sketches
+OpenDocument=/home/bk/.config/wallpapers/NieR_Theme
 SaveAs=/home/bk/Pictures/my_tinkering_with_krita/sketches
 
 [GenericGradientEditor]
@@ -657,46 +657,6 @@ yPosition=16
 pinControls=true
 
 [RecentFiles]
-File1[$e]=$HOME/Desktop/my_projects/nmf_2/assets/stage_assets/effect.png
-File10[$e]=$HOME/Pictures/my_tinkering_with_krita/sketches/3.kra
-File11[$e]=$HOME/Pictures/my_tinkering_with_krita/sketches/4.kra
-File12[$e]=$HOME/Pictures/my_tinkering_with_krita/sketches/5.kra
-File13[$e]=$HOME/Pictures/my_tinkering_with_krita/kureae.kra
-File14[$e]=$HOME/Pictures/my_tinkering_with_krita/sketches/1.kra
-File15[$e]=$HOME/Desktop/my_projects/nmf_2/assets/player_1/hitbox_alt.png
-File16[$e]=$HOME/Desktop/my_projects/nmf_2/assets/player_1/hitbox_alt_dot.png
-File17[$e]=$HOME/Desktop/my_projects/nmf_2/assets/player_1/hitbox_alt_dot.kra
-File18[$e]=$HOME/Pictures/my_tinkering_with_krita/sketches/6.kra
-File19[$e]=$HOME/Pictures/my_tinkering_with_krita/sketches/7.kra
-File2[$e]=$HOME/Desktop/my_projects/nmf_2/assets/krita_files/effect.kra
-File20[$e]=$HOME/Pictures/my_tinkering_with_krita/sketches/8.kra
-File3[$e]=$HOME/Pictures/my_tinkering_with_krita/one.kra
-File4[$e]=$HOME/Pictures/my_tinkering_with_krita/two.kra
-File5[$e]=$HOME/Desktop/my_projects/KaineQ/kaine.kra
-File6[$e]=$HOME/Pictures/my_tinkering_with_krita/zero.kra
-File7[$e]=$HOME/Pictures/my_tinkering_with_krita/nanre/Lilie.kra
-File8[$e]=$HOME/Pictures/my_tinkering_with_krita/sketches/0.kra
-File9[$e]=$HOME/Pictures/my_tinkering_with_krita/sketches/2.kra
-Name1=effect.png
-Name10=3.kra
-Name11=4.kra
-Name12=5.kra
-Name13=kureae.kra
-Name14=1.kra
-Name15=hitbox_alt.png
-Name16=hitbox_alt_dot.png
-Name17=hitbox_alt_dot.kra
-Name18=6.kra
-Name19=7.kra
-Name2=effect.kra
-Name20=8.kra
-Name3=one.kra
-Name4=two.kra
-Name5=kaine.kra
-Name6=zero.kra
-Name7=Lilie.kra
-Name8=0.kra
-Name9=2.kra
 maxRecentFileItems=100
 
 [SelectedTags]
@@ -730,13 +690,13 @@ useCustomColorForBackground=false
 Last Used=<!DOCTYPE params>\n<params version="1"/>\n
 
 [blur_filter_bookmarks]
-Last Used=<!DOCTYPE params>\n<params version="1">\n <param name="halfHeight" type="internal">3</param>\n <param name="halfWidth" type="internal">3</param>\n <param name="lockAspect" type="internal">true</param>\n <param name="rotate" type="internal">0</param>\n <param name="shape" type="internal">0</param>\n <param name="strength" type="internal">0</param>\n</params>\n
+Last Used=<!DOCTYPE params>\n<params version="1">\n <param type="internal" name="halfHeight">6</param>\n <param type="internal" name="halfWidth">6</param>\n <param type="internal" name="lockAspect">true</param>\n <param type="internal" name="rotate">0</param>\n <param type="internal" name="shape">0</param>\n <param type="internal" name="strength">0</param>\n</params>\n
 
 [colorbalance_filter_bookmarks]
 Last Used=<!DOCTYPE params>\n<params version="0">\n <param name="cyan_red_highlights" type="internal">-6</param>\n <param name="cyan_red_midtones" type="internal">0</param>\n <param name="cyan_red_shadows" type="internal">18</param>\n <param name="magenta_green_highlights" type="internal">0</param>\n <param name="magenta_green_midtones" type="internal">0</param>\n <param name="magenta_green_shadows" type="internal">0</param>\n <param name="preserve_luminosity" type="internal">true</param>\n <param name="yellow_blue_highlights" type="internal">3</param>\n <param name="yellow_blue_midtones" type="internal">0</param>\n <param name="yellow_blue_shadows" type="internal">0</param>\n</params>\n
 
 [colortoalpha_filter_bookmarks]
-Last Used=<!DOCTYPE params>\n<params version="1">\n <param type="internal" name="targetcolor">#035900</param>\n <param type="internal" name="threshold">100</param>\n</params>\n
+Last Used=<!DOCTYPE params>\n<params version="1">\n <param type="internal" name="targetcolor">#ffffff</param>\n <param type="internal" name="threshold">100</param>\n</params>\n
 
 [crashprevention]
 CreatingCanvas=false

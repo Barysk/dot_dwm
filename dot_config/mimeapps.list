@@ -42,6 +42,7 @@ video/x-sgi-movie=mpv.desktop
 video/x-theora+ogg=mpv.desktop
 x-scheme-handler/discord=vesktop.desktop
 x-scheme-handler/terminal=kitty.desktop
+x-scheme-handler/discord-424004941485572097=discord-424004941485572097.desktop
 
 [Added Associations]
 application/pdf=org.pwmt.zathura.desktop

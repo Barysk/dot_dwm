@@ -24,16 +24,10 @@ static const char col_black[]       = COL_BLACK;
 static const char col_accent[]      = COL_ACCENT;
 static const char col_secondary[]   = COL_SECONDARY;
 static const char col_white[]       = COL_WHITE;
-static const char *colors[][SchemeN][3] = {
-	/*                       fg         bg          border   */
-	{ /* dark */
-		[SchemeNorm] = { col_white, col_black,  col_black     },
-		[SchemeSel]  = { col_white, col_accent, col_secondary },
-	},
-	{ /* light */
-		[SchemeNorm] = { col_white, col_black,  col_black     },
-		[SchemeSel]  = { col_white, col_accent, col_black },
-	},
+static const char *colors[][3]      = {
+    /*               fg         bg          border        */
+    [SchemeNorm] = { col_white, col_black,  col_black     },
+    [SchemeSel]  = { col_white, col_accent, col_secondary },
 };
 
 
@@ -131,7 +125,6 @@ static const Key keys[] = {
     { MODKEY,                       XK_l,        setmfact,       {.f = +0.05} },
     { MODKEY|ShiftMask,             XK_Return,   zoom,           {0} },
     { MODKEY,                       XK_Tab,      view,           {0} },
-    { MODKEY,                       XK_c,        setscheme,      {.i = +1 } },
     { MODKEY|ShiftMask,             XK_Tab,      swapmon,        {0} },
     { MODKEY,                       XK_q,        killclient,     {0} },
     { MODKEY|ControlMask,           XK_h,        setlayout,      {.v = &layouts[0]} },

@@ -10,13 +10,15 @@ This build uses:
     * activemonitor
     * actualfullscreen
     * alwayscenter
-    * attachaside
+    * attachbottom
     * bottomstack
     * centerstack
+    * colorschemes
     * fullgaps
     * movestack
     * pertag_with_sel
     * statusallmons
+    * swapmonitors
     * systray
 * dwmblocks - same as slstatus but better
 * dmenu - application menu

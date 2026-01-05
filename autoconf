@@ -31,7 +31,7 @@ collect ()
 	cp -rf $HOME/.xinitrc      ./dot_xinitrc
 	cp -rf $HOME/.fonts/*      ./dot_fonts/
 	# configs
-	cp -rf $HOME/.config/betterlockscreen ./dot_config/
+	cp -rf $HOME/.config/betterlockscreen ./dot_config/betterlockscreen/
 	cp -rf $HOME/.config/dunst            ./dot_config/
 	cp -rf $HOME/.config/fastfetch        ./dot_config/
 	cp -rf $HOME/.config/kitty            ./dot_config/
