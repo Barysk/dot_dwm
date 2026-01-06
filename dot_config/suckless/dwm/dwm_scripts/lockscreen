@@ -1,5 +1,4 @@
 #!/bin/bash
 
-betterlockscreen -l dimblur -q
-#betterlockscreen -u /home/bk/.config/suckless/images/wallpaper/Touhou_Project/suika.jpg --fx dimblur
+slock
 

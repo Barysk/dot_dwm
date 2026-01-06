@@ -24,7 +24,7 @@ This build uses:
 * dmenu - application menu
 * j4-dmenu-desktop - wraper for dmenu
 * kitty - terminal emulator
-* betterlockscreen - lockscreen
+* slock - lockscreen
 * mpv - media player
 * picom - compositor
 * feh - wallpaper
