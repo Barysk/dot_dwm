@@ -18,6 +18,8 @@ deploy ()
 	sudo make -C "$HOME/.config/suckless/dwm" clean install
 	echo 'installing dwmblocks'
 	sudo make -C "$HOME/.config/suckless/dwmblocks" clean install
+	echo 'installing slock'
+	sudo make -C "$HOME/.config/suckless/slock-1.6" clean install
 
 	echo 'All done'
 }

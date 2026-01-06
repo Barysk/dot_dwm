@@ -11,5 +11,5 @@ static const int failonclear = 1;
 static const int xbell = 0;
 
 /* Background image path, should be available to the user above */
-/* path goes from your user's home directory */
-static const char* background_image = ".config/wallpapers/NieR_Theme/dod3_inappropriate.png";
+/* env variable that slock is going to look for */
+static const char* lockscreen_path = "LOCKSCREEN_PATH";

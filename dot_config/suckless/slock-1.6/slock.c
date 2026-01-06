@@ -51,17 +51,8 @@ struct xrandr {
 #include "config.h"
 
 const char *get_background_path(void) {
-	static char full_background_path[PATH_MAX];
-
-	struct passwd *pw = getpwuid(getuid());
-	if (!pw) {
-		perror("getpwuid");
-		exit(1);
-	}
-
-	snprintf(full_background_path, sizeof(full_background_path), "%s/%s", pw->pw_dir, background_image);
-
-	return full_background_path;
+	const char *path = getenv(lockscreen_path);
+	return path;
 }
 
 Imlib_Image image;
