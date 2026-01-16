@@ -7,19 +7,19 @@ An example of how this config looks
 
 This build uses:
 * dwm - window manager
+    * cfacts [ bottomstack, centermaster, deck ]
     * activemonitor
     * actualfullscreen
     * alwayscenter
     * attachbottom
-    * bottomstack
-    * centerstack
-    * colorschemes
-    * fullgaps
+    * fixborders
     * movestack
     * pertag_with_sel
     * statusallmons
     * swapmonitors
     * systray
+    * xinerma_monitors_xorder
+
 * dwmblocks - same as slstatus but better
 * dmenu - application menu
 * j4-dmenu-desktop - wraper for dmenu
@@ -29,16 +29,3 @@ This build uses:
 * picom - compositor
 * feh - wallpaper
 * flameshot - for screenshots
-
-also applyed this to make borders non-transparent:
-drw.c
-```
-	if (!XftColorAllocName(drw->dpy, DefaultVisual(drw->dpy, drw->screen),
-	                       DefaultColormap(drw->dpy, drw->screen),
-	                       clrname, dest))
-		die("error, cannot allocate color '%s'", clrname);
-+
-+	dest->pixel |= 0xff << 24;
-}
-}
-```
