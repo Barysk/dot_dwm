@@ -10,7 +10,7 @@ export MAIN_MONITOR="eDP"
 export MAIN_MONITOR_MODE="1920x1080"
 export MAIN_MONITOR_RATE="60"
 
-export WALLPAPER_PATH="$HOME/.config/wallpapers/NieR_Theme/OrchestralArrangementAlbumCover.png"
+export WALLPAPER_PATH="$HOME/.config/wallpapers/NieR_Theme/dragon.png"
 export LOCKSCREEN_PATH="$HOME/.config/wallpapers/NieR_Theme/dod3_inappropriate.png"
 
 # Start applications on startup

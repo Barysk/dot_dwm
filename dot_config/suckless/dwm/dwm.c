@@ -71,7 +71,7 @@
 
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
-enum { SchemeNorm, SchemeSel, SchemeN /* keeplast */ }; /* color schemes */
+enum { SchemeNorm, SchemeSel }; /* color schemes */
 enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
        NetSystemTray, NetSystemTrayOP, NetSystemTrayOrientation, NetSystemTrayOrientationHorz,
        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
@@ -101,6 +101,7 @@ typedef struct Client Client;
 struct Client {
 	char name[256];
 	float mina, maxa;
+	float cfact;
 	int x, y, w, h;
 	int oldx, oldy, oldw, oldh;
 	int basew, baseh, incw, inch, maxw, maxh, minw, minh, hintsvalid;
@@ -134,7 +135,6 @@ struct Monitor {
 	int by;               /* bar geometry */
 	int mx, my, mw, mh;   /* screen size */
 	int wx, wy, ww, wh;   /* window area  */
-	int gappx;            /* gaps between windows */
 	unsigned int seltags;
 	unsigned int sellt;
 	unsigned int tagset[2];
@@ -181,6 +181,7 @@ static void configure(Client *c);
 static void configurenotify(XEvent *e);
 static void configurerequest(XEvent *e);
 static Monitor *createmon(void);
+static void deck(Monitor *m);
 static void destroynotify(XEvent *e);
 static void detach(Client *c);
 static void detachstack(Client *c);
@@ -228,10 +229,9 @@ static void sendmon(Client *c, Monitor *m);
 static void setclientstate(Client *c, long state);
 static void setfocus(Client *c);
 static void setfullscreen(Client *c, int fullscreen);
-static void setgaps(const Arg *arg);
 static void setlayout(const Arg *arg);
+static void setcfact(const Arg *arg);
 static void setmfact(const Arg *arg);
-static void setscheme(const Arg *arg);
 static void setup(void);
 static void seturgent(Client *c, int urg);
 static void showhide(Client *c);
@@ -270,10 +270,10 @@ static int xerrordummy(Display *dpy, XErrorEvent *ee);
 static int xerrorstart(Display *dpy, XErrorEvent *ee);
 static void zoom(const Arg *arg);
 static void swapmon(const Arg *arg);
-static void bstack(Monitor *m);
-static void bstackhoriz(Monitor *m);
 static void centeredmaster(Monitor *m);
 static void centeredfloatingmaster(Monitor *m);
+static void bstack(Monitor *m);
+static void bstackhoriz(Monitor *m);
 
 /* variables */
 static Systray *systray = NULL;
@@ -305,7 +305,7 @@ static void (*handler[LASTEvent]) (XEvent *) = {
 static Atom wmatom[WMLast], netatom[NetLast], xatom[XLast];
 static int running = 1;
 static Cur *cursor[CurLast];
-static Clr **schemes, **scheme;
+static Clr **scheme;
 static Display *dpy;
 static Drw *drw;
 static Monitor *mons, *selmon;
@@ -555,9 +555,9 @@ cleanup(void)
 
 	for (i = 0; i < CurLast; i++)
 		drw_cur_free(drw, cursor[i]);
-	for (i = 0; i < LENGTH(colors) * SchemeN; i++)
-		free(schemes[i]);
-	free(schemes);
+	for (i = 0; i < LENGTH(colors); i++)
+		drw_scm_free(drw, scheme[i], 3);
+	free(scheme);
 	XDestroyWindow(dpy, wmcheckwin);
 	drw_free(drw);
 	XSync(dpy, False);
@@ -760,7 +760,6 @@ createmon(void)
 	m->nmaster = nmaster;
 	m->showbar = showbar;
 	m->topbar = topbar;
-	m->gappx = gappx;
 	m->lt[0] = &layouts[0];
 	m->lt[1] = &layouts[1 % LENGTH(layouts)];
 	strncpy(m->ltsymbol, layouts[0].symbol, sizeof m->ltsymbol);
@@ -795,6 +794,38 @@ destroynotify(XEvent *e)
 		updatesystray();
 	}
 }
+
+void
+deck(Monitor *m) {
+	unsigned int i, n, h, mw, my;
+	float mfacts = 0;
+	Client *c;
+
+	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++) {
+		if (n < m->nmaster)
+			mfacts += c->cfact;
+	}
+	if(n == 0)
+		return;
+
+	if(n > m->nmaster) {
+		mw = m->nmaster ? m->ww * m->mfact : 0;
+		snprintf(m->ltsymbol, sizeof m->ltsymbol, "[%d]", n - m->nmaster);
+	}
+	else
+		mw = m->ww;
+	for(i = my = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
+		if(i < m->nmaster) {
+			h = (m->wh - my) * (c->cfact / mfacts);
+			resize(c, m->wx, m->wy + my, mw - (2*c->bw), h - (2*c->bw), False);
+			if (my + HEIGHT(c) < m->wh)
+				my += HEIGHT(c);
+			mfacts -= c->cfact;
+		}
+		else
+			resize(c, m->wx + mw, m->wy, m->ww - mw - (2*c->bw), m->wh - (2*c->bw), False);
+}
+
 
 void
 detach(Client *c)
@@ -1023,7 +1054,6 @@ getatomprop(Client *c, Atom prop)
 
 	if (XGetWindowProperty(dpy, c->win, prop, 0L, sizeof atom, False, req,
 		&da, &di, &dl, &dl, &p) == Success && p) {
-		atom = *(Atom *)p;
 		if (da == xatom[XembedInfo] && dl == 2)
 			atom = ((Atom *)p)[1];
 		XFree(p);
@@ -1208,6 +1238,7 @@ manage(Window w, XWindowAttributes *wa)
 	c->w = c->oldw = wa->width;
 	c->h = c->oldh = wa->height;
 	c->oldbw = wa->border_width;
+	c->cfact = 1.0;
 
 	updatetitle(c);
 	if (XGetTransientForHint(dpy, w, &trans) && (t = wintoclient(trans))) {
@@ -1346,7 +1377,7 @@ movemouse(const Arg *arg)
 			handler[ev.type](&ev);
 			break;
 		case MotionNotify:
-			if ((ev.xmotion.time - lasttime) <= (1000 / 60))
+			if ((ev.xmotion.time - lasttime) <= (1000 / refreshrate))
 				continue;
 			lasttime = ev.xmotion.time;
 
@@ -1545,7 +1576,7 @@ resizemouse(const Arg *arg)
 			handler[ev.type](&ev);
 			break;
 		case MotionNotify:
-			if ((ev.xmotion.time - lasttime) <= (1000 / 60))
+			if ((ev.xmotion.time - lasttime) <= (1000 / refreshrate))
 				continue;
 			lasttime = ev.xmotion.time;
 
@@ -1738,16 +1769,6 @@ setfullscreen(Client *c, int fullscreen)
 }
 
 void
-setgaps(const Arg *arg)
-{
-	if ((arg->i == 0) || (selmon->gappx + arg->i < 0))
-		selmon->gappx = 0;
-	else
-		selmon->gappx += arg->i;
-	arrange(selmon);
-}
-
-void
 setlayout(const Arg *arg)
 {
 	if (!arg || !arg->v || arg->v != selmon->lt[selmon->sellt])
@@ -1759,6 +1780,23 @@ setlayout(const Arg *arg)
 		arrange(selmon);
 	else
 		drawbar(selmon);
+}
+
+void setcfact(const Arg *arg) {
+	float f;
+	Client *c;
+
+	c = selmon->sel;
+
+	if(!arg || !c || !selmon->lt[selmon->sellt]->arrange)
+		return;
+	f = arg->f + c->cfact;
+	if(arg->f == 0.0)
+		f = 1.0;
+	else if(f < 0.25 || f > 4.0)
+		return;
+	c->cfact = f;
+	arrange(selmon);
 }
 
 /* arg > 1.0 will set mfact absolutely */
@@ -1777,36 +1815,9 @@ setmfact(const Arg *arg)
 }
 
 void
-setscheme(const Arg *arg)
-{
-	ptrdiff_t si;
-	Monitor *m;
-	Client *c;
-
-	/* select default color scheme */
-	if (!arg || arg->i == 0)
-		si = 0;
-	else
-		si = (scheme - schemes) + arg->i * SchemeN;
-
-	/* wrap around, won't work if (abs(arg->i) > LENGTH(colors)) */
-	if (si < 0)
-		si += LENGTH(colors) * SchemeN;
-	else if (si >= LENGTH(colors) * SchemeN)
-		si -= LENGTH(colors) * SchemeN;
-
-	scheme = &schemes[si];
-
-	drawbars();
-	for (m = mons; m; m = m->next)
-		for (c = m->clients; c; c = c->next)
-			XSetWindowBorder(dpy, c->win, scheme[c == selmon->sel ? SchemeSel : SchemeNorm][ColBorder].pixel);
-}
-
-void
 setup(void)
 {
-	int i, j;
+	int i;
 	XSetWindowAttributes wa;
 	Atom utf8string;
 	struct sigaction sa;
@@ -1858,12 +1869,9 @@ setup(void)
 	cursor[CurResize] = drw_cur_create(drw, XC_sizing);
 	cursor[CurMove] = drw_cur_create(drw, XC_fleur);
 	/* init appearance */
-	schemes = ecalloc(LENGTH(colors), SchemeN * sizeof(Clr *));
-	for (j = LENGTH(colors) - 1; j >= 0; j--) {
-		scheme = &schemes[j * SchemeN];
-		for (i = 0; i < SchemeN; i++)
-			scheme[i] = drw_scm_create(drw, colors[j][i], 3);
-	}
+	scheme = ecalloc(LENGTH(colors), sizeof(Clr *));
+	for (i = 0; i < LENGTH(colors); i++)
+		scheme[i] = drw_scm_create(drw, colors[i], 3);
 	/* init system tray */
 	updatesystray();
 	/* init bars */
@@ -1967,27 +1975,35 @@ void
 tile(Monitor *m)
 {
 	unsigned int i, n, h, mw, my, ty;
+	float mfacts = 0, sfacts = 0;
 	Client *c;
 
-	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
+	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++) {
+		if (n < m->nmaster)
+			mfacts += c->cfact;
+		else
+			sfacts += c->cfact;
+	}
 	if (n == 0)
 		return;
 
 	if (n > m->nmaster)
 		mw = m->nmaster ? m->ww * m->mfact : 0;
 	else
-		mw = m->ww - m->gappx;
-	for (i = 0, my = ty = m->gappx, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
-			if (i < m->nmaster) {
-			h = (m->wh - my) / (MIN(n, m->nmaster) - i) - m->gappx;
-			resize(c, m->wx + m->gappx, m->wy + my, mw - (2*c->bw) - m->gappx, h - (2*c->bw), 0);
-			if (my + HEIGHT(c) + m->gappx < m->wh)
-				my += HEIGHT(c) + m->gappx;
+		mw = m->ww;
+	for (i = my = ty = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
+		if (i < m->nmaster) {
+			h = (m->wh - my) * (c->cfact / mfacts);
+			resize(c, m->wx, m->wy + my, mw - (2*c->bw), h - (2*c->bw), 0);
+			if (my + HEIGHT(c) < m->wh)
+				my += HEIGHT(c);
+     mfacts -= c->cfact;
 		} else {
-			h = (m->wh - ty) / (n - i) - m->gappx;
-			resize(c, m->wx + mw + m->gappx, m->wy + ty, m->ww - mw - (2*c->bw) - 2*m->gappx, h - (2*c->bw), 0);
-			if (ty + HEIGHT(c) + m->gappx < m->wh)
-				ty += HEIGHT(c) + m->gappx;
+			h = (m->wh - ty) * (c->cfact / sfacts);
+			resize(c, m->wx + mw, m->wy + ty, m->ww - mw - (2*c->bw), h - (2*c->bw), 0);
+			if (ty + HEIGHT(c) < m->wh)
+				ty += HEIGHT(c);
+     sfacts -= c->cfact;
 		}
 }
 
@@ -2202,6 +2218,16 @@ updateclientlist(void)
 				(unsigned char *) &(c->win), 1);
 }
 
+#ifdef XINERAMA
+// Custom comparator: sort monitors by x_org to match physical layout left-to-right
+static int
+compare_xinerama_x(const void *a, const void *b) {
+	const XineramaScreenInfo *sa = (const XineramaScreenInfo *)a;
+	const XineramaScreenInfo *sb = (const XineramaScreenInfo *)b;
+	return sa->x_org - sb->x_org;
+}
+#endif /* XINERAMA */
+
 int
 updategeom(void)
 {
@@ -2218,6 +2244,8 @@ updategeom(void)
 		for (n = 0, m = mons; m; m = m->next, n++);
 		/* only consider unique geometries as separate screens */
 		unique = ecalloc(nn, sizeof(XineramaScreenInfo));
+		// Sort monitors by x_org so dwm handles screens in left-to-right order
+		qsort(info, nn, sizeof(XineramaScreenInfo), compare_xinerama_x);
 		for (i = 0, j = 0; i < nn; i++)
 			if (isuniquegeom(unique, j, &info[i]))
 				memcpy(&unique[j++], &info[i], sizeof(XineramaScreenInfo));
@@ -2708,15 +2736,112 @@ main(int argc, char *argv[])
 }
 
 void
+bstack(Monitor *m)
+{
+	unsigned int i, n, w, mh, mx, tx;
+	float mfacts = 0, sfacts = 0;
+	Client *c;
+
+	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++) {
+		if (n < m->nmaster)
+			mfacts += c->cfact;
+		else
+			sfacts += c->cfact;
+	}
+	if (n == 0)
+		return;
+	if(n == 1){
+		c = nexttiled(m->clients);
+		resize(c, m->wx, m->wy, m->ww - 2 * c->bw, m->wh - 2 * c->bw, 0);
+		return;
+	}
+
+	if (n > m->nmaster)
+		mh = m->nmaster ? m->wh * m->mfact : 0;
+	else
+		mh = m->wh;
+	for (i = 0, mx = tx = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
+		if (i < m->nmaster) {
+			w = (m->ww - mx) * (c->cfact / mfacts);
+			resize(c, m->wx + mx, m->wy, w - (2*c->bw), mh - 2*c->bw, 0);
+			if(mx + WIDTH(c) < m->mw)
+				mx += WIDTH(c);
+			mfacts -= c->cfact;
+		} else {
+			w = (m->ww - tx) * (c->cfact / sfacts);
+			resize(c, m->wx + tx, m->wy + mh, w - (2*c->bw), m->wh - mh - 2*(c->bw), 0);
+			if(tx + WIDTH(c) < m->mw)
+				tx += WIDTH(c);
+			sfacts -= c->cfact;
+		}
+}
+
+void
+bstackhoriz(Monitor *m)
+{
+	unsigned int i, n, h, mw, mh, my, ty;
+	float mfacts = 0, sfacts = 0;
+	Client *c;
+
+	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++) {
+		if (n < m->nmaster)
+			mfacts += c->cfact;
+		else
+			sfacts += c->cfact;
+	}
+	if (n == 0)
+		return;
+	if(n == 1){
+		c = nexttiled(m->clients);
+		resize(c, m->wx, m->wy, m->ww - 2 * c->bw, m->wh - 2 * c->bw, 0);
+		return;
+	}
+
+	if (n > m->nmaster)
+		mh = m->nmaster ? m->wh * m->mfact : 0;
+	else
+		mh = m->wh;
+	mw = m->ww;
+
+	for (i = ty = 0, my = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
+		if (i < m->nmaster) {
+			h = (mh - my) * (c->cfact / mfacts);
+			resize(c, m->wx, m->wy + my, mw - 2*c->bw, h - 2*c->bw, 0);
+			if(my + HEIGHT(c) < m->mh)
+				my += HEIGHT(c);
+			mfacts -= c->cfact;
+		} else {
+			h = (m->wh - mh - ty) * (c->cfact / sfacts);
+			resize(c, m->wx, m->wy + mh + ty, mw - 2*c->bw, h - (2*c->bw), 0);
+			if(ty + HEIGHT(c) < m->mh)
+				ty += HEIGHT(c);
+			sfacts -= c->cfact;
+		}
+}
+
+void
 centeredmaster(Monitor *m)
 {
 	unsigned int i, n, h, mw, mx, my, oty, ety, tw;
+	float mfacts = 0, lfacts = 0, rfacts = 0;
 	Client *c;
 
 	/* count number of clients in the selected monitor */
-	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
+	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++) {
+		if (n < m->nmaster)
+			mfacts += c->cfact;
+		else if ((n - m->nmaster) % 2) 
+			lfacts += c->cfact;
+		else
+			rfacts += c->cfact;
+	}
 	if (n == 0)
 		return;
+	if(n == 1){
+		c = nexttiled(m->clients);
+		resize(c, m->wx, m->wy, m->ww - 2 * c->bw, m->wh - 2 * c->bw, 0);
+		return;
+	}
 
 	/* initialize areas */
 	mw = m->ww;
@@ -2742,22 +2867,32 @@ centeredmaster(Monitor *m)
 	if (i < m->nmaster) {
 		/* nmaster clients are stacked vertically, in the center
 		 * of the screen */
-		h = (m->wh - my) / (MIN(n, m->nmaster) - i);
-		resize(c, m->wx + mx, m->wy + my, mw - (2*c->bw),
-		       h - (2*c->bw), 0);
-		my += HEIGHT(c);
+		h = (m->wh - my) * (c->cfact / mfacts);
+		resize(c, m->wx + mx, m->wy + my, mw - 2*c->bw,
+		      h - 2*c->bw, 0);
+		if(my + HEIGHT(c) < m->mh)
+			my += HEIGHT(c);
+		mfacts -= c->cfact;
 	} else {
 		/* stack clients are stacked vertically */
-		if ((i - m->nmaster) % 2 ) {
-			h = (m->wh - ety) / ( (1 + n - i) / 2);
-			resize(c, m->wx, m->wy + ety, tw - (2*c->bw),
-			       h - (2*c->bw), 0);
-			ety += HEIGHT(c);
+		if ((i - m->nmaster) % 2) {
+			h = (m->wh - ety) * (c->cfact / lfacts);
+			if(m->nmaster == 0)
+				resize(c, m->wx, m->wy + ety, tw - 2*c->bw,
+			       h - 2*c->bw, 0);
+			else
+				resize(c, m->wx, m->wy + ety, tw - 2*c->bw,
+			       h - 2*c->bw, 0);
+			if(ety + HEIGHT(c) < m->mh)
+				ety += HEIGHT(c);
+			lfacts -= c->cfact;
 		} else {
-			h = (m->wh - oty) / ((1 + n - i) / 2);
+			h = (m->wh - oty) * (c->cfact / rfacts);
 			resize(c, m->wx + mx + mw, m->wy + oty,
-			       tw - (2*c->bw), h - (2*c->bw), 0);
-			oty += HEIGHT(c);
+			       tw - 2*c->bw, h - 2*c->bw, 0);
+			if(oty + HEIGHT(c) < m->mh)
+				oty += HEIGHT(c);
+			rfacts -= c->cfact;
 		}
 	}
 }
@@ -2766,12 +2901,23 @@ void
 centeredfloatingmaster(Monitor *m)
 {
 	unsigned int i, n, w, mh, mw, mx, mxo, my, myo, tx;
+	float mfacts = 0, sfacts = 0;
 	Client *c;
 
 	/* count number of clients in the selected monitor */
-	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
+	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++) {
+		if (n < m->nmaster)
+			mfacts += c->cfact;
+		else
+			sfacts += c->cfact;
+	}
 	if (n == 0)
 		return;
+	if(n == 1){
+		c = nexttiled(m->clients);
+		resize(c, m->wx, m->wy, m->ww - 2 * c->bw, m->wh - 2 * c->bw, 0);
+		return;
+	}
 
 	/* initialize nmaster area */
 	if (n > m->nmaster) {
@@ -2797,77 +2943,19 @@ centeredfloatingmaster(Monitor *m)
 	if (i < m->nmaster) {
 		/* nmaster clients are stacked horizontally, in the center
 		 * of the screen */
-		w = (mw + mxo - mx) / (MIN(n, m->nmaster) - i);
-		resize(c, m->wx + mx, m->wy + my, w - (2*c->bw),
-		       mh - (2*c->bw), 0);
-		mx += WIDTH(c);
+		w = (mw + mxo - mx) * (c->cfact / mfacts);
+		resize(c, m->wx + mx, m->wy + my, w - 2*c->bw,
+		       mh - 2*c->bw, 0);
+		if(mx + WIDTH(c) < m->mw)
+			mx += WIDTH(c);
+		mfacts -= c->cfact; 
 	} else {
 		/* stack clients are stacked horizontally */
-		w = (m->ww - tx) / (n - i);
-		resize(c, m->wx + tx, m->wy, w - (2*c->bw),
-		       m->wh - (2*c->bw), 0);
-		tx += WIDTH(c);
-	}
-}
-
-static void
-bstack(Monitor *m) {
-	int w, h, mh, mx, tx, ty, tw;
-	unsigned int i, n;
-	Client *c;
-
-	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
-	if (n == 0)
-		return;
-	if (n > m->nmaster) {
-		mh = m->nmaster ? m->mfact * m->wh : 0;
-		tw = m->ww / (n - m->nmaster);
-		ty = m->wy + mh;
-	} else {
-		mh = m->wh;
-		tw = m->ww;
-		ty = m->wy;
-	}
-	for (i = mx = 0, tx = m->wx, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++) {
-		if (i < m->nmaster) {
-			w = (m->ww - mx) / (MIN(n, m->nmaster) - i);
-			resize(c, m->wx + mx, m->wy, w - (2 * c->bw), mh - (2 * c->bw), 0);
-			mx += WIDTH(c);
-		} else {
-			h = m->wh - mh;
-			resize(c, tx, ty, tw - (2 * c->bw), h - (2 * c->bw), 0);
-			if (tw != m->ww)
-				tx += WIDTH(c);
-		}
-	}
-}
-
-static void
-bstackhoriz(Monitor *m) {
-	int w, mh, mx, tx, ty, th;
-	unsigned int i, n;
-	Client *c;
-
-	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
-	if (n == 0)
-		return;
-	if (n > m->nmaster) {
-		mh = m->nmaster ? m->mfact * m->wh : 0;
-		th = (m->wh - mh) / (n - m->nmaster);
-		ty = m->wy + mh;
-	} else {
-		th = mh = m->wh;
-		ty = m->wy;
-	}
-	for (i = mx = 0, tx = m->wx, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++) {
-		if (i < m->nmaster) {
-			w = (m->ww - mx) / (MIN(n, m->nmaster) - i);
-			resize(c, m->wx + mx, m->wy, w - (2 * c->bw), mh - (2 * c->bw), 0);
-			mx += WIDTH(c);
-		} else {
-			resize(c, tx, ty, m->ww - (2 * c->bw), th - (2 * c->bw), 0);
-			if (th != m->wh)
-				ty += HEIGHT(c);
-		}
+		w = (m->ww - tx) * (c->cfact / sfacts);
+		resize(c, m->wx + tx, m->wy, w - 2*c->bw,
+		       m->wh - 2*c->bw, 0);
+		if(tx + WIDTH(c) < m->mw)
+			tx += WIDTH(c);
+		sfacts -= c->cfact; 
 	}
 }
