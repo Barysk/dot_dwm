@@ -977,7 +977,15 @@ focus(Client *c)
 		detachstack(c);
 		attachstack(c);
 		grabbuttons(c, 1);
-		XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColBorder].pixel);
+		int n = 0;
+		Client *tc;
+		for (tc = selmon->clients; tc; tc = tc->next)
+			if (ISVISIBLE(tc))
+				n++;
+		if (n == 1)
+			XSetWindowBorder(dpy, c->win, scheme[SchemeNorm][ColBorder].pixel);
+		else
+			XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColBorder].pixel);
 		setfocus(c);
 	} else {
 		XSetInputFocus(dpy, root, RevertToPointerRoot, CurrentTime);

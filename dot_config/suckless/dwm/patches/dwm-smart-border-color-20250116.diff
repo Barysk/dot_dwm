@@ -1,0 +1,25 @@
+From: Boris Komarov <boris.komarov@proton.me>
+Date: Fri, 16 Jan 2026 03:40:59 +0100
+Subject: [PATCH] Use active border color only when more than one client is visible
+
+diff --git a/dwm.c b/dwm.c
+index bba82d7..42d72cd 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -977,7 +977,15 @@ focus(Client *c)
+ 		detachstack(c);
+ 		attachstack(c);
+ 		grabbuttons(c, 1);
+-		XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColBorder].pixel);
++		int n = 0;
++		Client *tc;
++		for (tc = selmon->clients; tc; tc = tc->next)
++			if (ISVISIBLE(tc))
++				n++;
++		if (n == 1)
++			XSetWindowBorder(dpy, c->win, scheme[SchemeNorm][ColBorder].pixel);
++		else
++			XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColBorder].pixel);
+ 		setfocus(c);
+ 	} else {
+ 		XSetInputFocus(dpy, root, RevertToPointerRoot, CurrentTime);

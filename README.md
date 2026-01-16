@@ -15,6 +15,7 @@ This build uses:
     * fixborders
     * movestack
     * pertag_with_sel
+    * smart_border_color [ by me ]
     * statusallmons
     * swapmonitors
     * systray
