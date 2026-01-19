@@ -1,38 +1,32 @@
 #include "movestack.c"
 
-// "monospace:size=10"
-#define FONT          "M PLUS 2:size=9:bold"
+#define FONT          "serif:size=12"
 #define COL_BLACK     "#000000"
-#define COL_ACCENT    "#333333"
-#define COL_SECONDARY "#777777"
 #define COL_WHITE     "#ffffff"
+#define COL_ACCENT    "#646464"
+#define COL_SECONDARY "#323232"
 
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 0;        /* snap pixel */
-static const unsigned int systraypinning = 1;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
+static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft  = 1;   /* 0: systray in the right corner, >0: systray on left of status text */
 static const unsigned int systrayspacing = 0;   /* systray spacing */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
 static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
-static const int topbar             = 1;        /* 0 means bottom bar */
+static const int topbar             = 0;        /* 0 means bottom bar */
 static const char *fonts[]          = { FONT };
 static const char dmenufont[]       = FONT;
 
-static const char col_black[]       = COL_BLACK;
-static const char col_accent[]      = COL_ACCENT;
-static const char col_secondary[]   = COL_SECONDARY;
-static const char col_white[]       = COL_WHITE;
-
 static const char *colors[][3]      = {
-	/*               fg         bg          border   */
-	[SchemeNorm] = { col_white, col_black,  col_black     },
-	[SchemeSel]  = { col_white, col_accent, col_secondary },
+	/*               fg         bg             border   */
+	[SchemeNorm] = { COL_WHITE, COL_BLACK,     COL_BLACK  },
+	[SchemeSel]  = { COL_WHITE, COL_SECONDARY, COL_ACCENT },
 };
 
 /* tagging */
-static const char *tags[] = { "一", "二", "三", "四", "五", "六", "七", "八", "九" };
+static const char *tags[] = { "一", "二", "三", "四", "五", "六", "七", "八", "九", "十" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -54,12 +48,12 @@ static const int refreshrate    = 60; /* refresh rate (per second) for client mo
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "[タイル]",   tile },    /* first entry is default */
-	{ "[フロート]", NULL },    /* no layout function means floating behavior */
-	{ "[メガネ]",   monocle },
-	{ "[センター]", centeredmaster },
-	{ "[トップ]",   bstack },
-	{ "[デッキ]",   deck },
+	{ "[ タイル ]",   tile },    /* first entry is default */
+	{ "[ フロート ]", NULL },    /* no layout function means floating behavior */
+	{ "[ メガネ ]",   monocle },
+	{ "[ センター ]", centeredmaster },
+	{ "[ トップ ]",   bstack },
+	{ "[ デッキ ]",   deck },
 	// { ">M>",      centeredfloatingmaster },
 	// { "===",      bstackhoriz },
 };
@@ -77,7 +71,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[]     = { "/home/bk/.config/suckless/dwm/dwm_scripts/dmenu_wrapper", dmenumon, FONT, COL_BLACK, COL_WHITE, COL_ACCENT, COL_WHITE, NULL };
+static const char *dmenucmd[]     = { "/home/bk/.config/suckless/dwm/dwm_scripts/dmenu_wrapper", dmenumon, FONT, COL_BLACK, COL_WHITE, COL_SECONDARY, COL_WHITE, NULL };
 static const char *termcmd[]      = { "kitty",    NULL };
 static const char *explrcmd[]     = { "pcmanfm",  NULL };
 static const char *browsercmd[]   = { "brave",    NULL };
@@ -99,7 +93,7 @@ static const char *multimedia_next[]     = { "playerctl", "next", NULL };
 static const char *multimedia_previous[] = { "playerctl", "previous", NULL };
 
 /* multi monitor */
-static const char *connect_second_screen[] = { "/home/bk/.config/suckless/dwm/dwm_scripts/change_monitors", dmenufont, col_black, col_white, col_accent, col_white, NULL };
+static const char *connect_second_screen[] = { "/home/bk/.config/suckless/dwm/dwm_scripts/change_monitors", dmenufont, COL_BLACK, COL_WHITE, COL_SECONDARY, COL_WHITE, NULL };
 
 /* lockscreen command */
 static const char *lock_screen[] = { "/home/bk/.config/suckless/dwm/dwm_scripts/lockscreen", NULL };
@@ -159,8 +153,8 @@ static const Key keys[] = {
 	// 14
 	{ MODKEY|ShiftMask,             XK_f,        togglefloating, {0} },
 	{ MODKEY,                       XK_f,        togglefullscr,  {0} },
-	{ MODKEY,                       XK_0,        view,           {.ui = ~0 } },
-	{ MODKEY|ShiftMask,             XK_0,        tag,            {.ui = ~0 } },
+	{ MODKEY,                       XK_percent,  view,           {.ui = ~0 } },
+	{ MODKEY|ShiftMask,             XK_percent,  tag,            {.ui = ~0 } },
 	{ MODKEY,                       XK_comma,    focusmon,       {.i = -1 } },
 	{ MODKEY,                       XK_period,   focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,    tagmon,         {.i = -1 } },
@@ -176,6 +170,7 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_parenright,               6)
 	TAGKEYS(                        XK_braceright,               7)
 	TAGKEYS(                        XK_bracketright,             8)
+	TAGKEYS(                        XK_asterisk,                 9)
 	{ MODKEY|ShiftMask,             XK_Escape,  quit,            {0} },
 	// 10
 };

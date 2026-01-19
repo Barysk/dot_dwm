@@ -19,3 +19,19 @@ alias pentablet="$HOME/.config/suckless/dwm/dwm_scripts/pentablet"
 alias archwiki="$BROWSER /usr/share/doc/arch-wiki/html/en/Main_page.html"
 
 PS1='\n  ┌─[ \[\033[36m\]\W\[\033[37m\] ]\n  └─> '
+
+rand() {
+	if [[ -z $1 || -z $2 ]]; then
+		echo "provide min and max"
+		return 1
+	fi
+	min=$1
+	max=$2 
+	if [[ $min -gt $max ]]; then
+		min=$2
+		max=$1
+	fi
+	echo $(($RANDOM%($max-$min+1)+$min))
+	return 0
+}
+

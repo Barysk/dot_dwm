@@ -7,5 +7,4 @@ nf="$4"
 sb="$5"
 sf="$6"
 
-j4-dmenu-desktop -d "dmenu -i -m $monitor -fn '$dmenu_font' -nb '$nb' -nf '$nf' -sb '$sb' -sf '$sf'"
-
+dmenu_run_desktop -i -m $monitor -fn $dmenu_font -nb $nb -nf $nf -sb $sb -sf $sf

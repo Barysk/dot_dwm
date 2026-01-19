@@ -1,6 +1,6 @@
 From: Boris Komarov <boris.komarov@proton.me>
 Date: Fri, 16 Jan 2026 03:40:59 +0100
-Subject: [PATCH] Use active border color only when more than one client is visible
+Subject: [PATCH] Use active color border only if more than one client
 
 diff --git a/dwm.c b/dwm.c
 index bba82d7..42d72cd 100644

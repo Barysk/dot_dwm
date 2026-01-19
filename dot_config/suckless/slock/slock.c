@@ -20,7 +20,6 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <Imlib2.h>
-#include <limits.h>
 
 #include "arg.h"
 #include "util.h"
@@ -329,6 +328,22 @@ usage(void)
 	die("usage: slock [-v] [cmd [arg ...]]\n");
 }
 
+double
+max(double x, double y) {
+	if (x > y)
+		return x;
+	else
+		return y;
+}
+
+double
+min(double x, double y) {
+	if (x < y)
+		return x;
+	else
+		return y;
+}
+
 int
 main(int argc, char **argv) {
 	struct xrandr rr;
@@ -399,7 +414,58 @@ main(int argc, char **argv) {
 
 	int i;
 	for (i = 0; i < number_of_monitors; i++) {
-		imlib_blend_image_onto_image(buffer, 0, 0, 0, background_image_width, background_image_height, monitors[i].x, monitors[i].y, monitors[i].width, monitors[i].height);
+		int mw = monitors[i].width;
+		int mh = monitors[i].height;
+
+		// Create a temporary canvas for this monitor
+		Imlib_Image monitor_img = imlib_create_image(mw, mh);
+		imlib_context_set_image(monitor_img);
+
+		// Fill with black
+		imlib_context_set_color(0, 0, 0, 255);
+		imlib_image_fill_rectangle(0, 0, mw, mh);
+
+		// Compute aspect-preserving scale
+		double scale = 0;
+		if (image_mode == 1)
+			scale = max(
+				(double)mw / background_image_width,
+				(double)mh / background_image_height
+			);
+		else
+			scale = min(
+				(double)mw / background_image_width,
+				(double)mh / background_image_height
+			);
+
+		int new_w = background_image_width * scale;
+		int new_h = background_image_height * scale;
+
+		int offset_x = (mw - new_w) / 2;
+		int offset_y = (mh - new_h) / 2;
+
+		// Draw onto the monitor-local canvas
+		imlib_blend_image_onto_image(buffer,
+			0,
+			0, 0, background_image_width, background_image_height,
+			offset_x, offset_y,
+			new_w, new_h
+		);
+
+		// Paste the monitor image into the correct location
+		imlib_context_set_image(image);
+		imlib_blend_image_onto_image(monitor_img,
+			0,
+			0, 0, mw, mh,
+			monitors[i].x,
+			monitors[i].y,
+			mw,
+			mh
+		);
+
+		// Clean temporary
+		imlib_context_set_image(monitor_img);
+		imlib_free_image();
 	}
 
 	/* Clean up */

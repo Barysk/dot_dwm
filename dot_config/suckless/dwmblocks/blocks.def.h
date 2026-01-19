@@ -3,9 +3,9 @@ static const Block blocks[] = {
 	/*Icon*/    /*Command*/                                                    /*Update Interval*/   /*Update Signal*/
 	{"",        "~/.config/suckless/dwmblocks/blocks_scripts/keyboard_layout",                 60,                 4},
 	{"",        "~/.config/suckless/dwmblocks/blocks_scripts/volume",                           0,                10},
-	// Uncomment/comment to add/remove a battery module
 	{"",        "~/.config/suckless/dwmblocks/blocks_scripts/battery",                         60,                 0},
 	{"",        "~/.config/suckless/dwmblocks/blocks_scripts/time",                             1,                 0},
+	{"",        "echo '[ DWM ]'",                                                               0,                 0},
 };
 
 // signal is being emmited withusage of kill -N $(pidof dwmblocks)
