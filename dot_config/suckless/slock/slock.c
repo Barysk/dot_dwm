@@ -399,6 +399,7 @@ main(int argc, char **argv) {
 	/* Load picture */
 	Imlib_Image buffer = imlib_load_image(get_background_path());
 	imlib_context_set_image(buffer);
+	imlib_image_blur(blur_radius);
 	int background_image_width = imlib_image_get_width();
 	int background_image_height = imlib_image_get_height();
 

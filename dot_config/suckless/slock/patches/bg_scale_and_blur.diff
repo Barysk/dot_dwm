@@ -1,5 +1,5 @@
 Author: Boris Komarov <boris.komarov@proton.me>
-Date: Mon, 19 Jan 2026 19:58:08 +0100
+Date: Mon, 19 Jan 2026 20:49:06 +0100
 Subject: [PATCH] Always use the current users password ($USER) and exported path for background image. Can be scaled to either fit screen, or fill it preserving aspect.
 
 diff --git a/config.def.h b/config.def.h
@@ -37,7 +37,7 @@ index dcd27d0..04a4c85 100644
  # flags
  CPPFLAGS = -DVERSION=\"${VERSION}\" -D_DEFAULT_SOURCE -DHAVE_SHADOW_H
 diff --git a/slock.c b/slock.c
-index b5a9b04..9d1b3cd 100644
+index b5a9b04..b13de24 100644
 --- a/slock.c
 +++ b/slock.c
 @@ -19,6 +19,7 @@
@@ -152,13 +152,14 @@ index b5a9b04..9d1b3cd 100644
  		    errno ? strerror(errno) : "group entry not found");
  	dgid = grp->gr_gid;
  
-@@ -356,6 +395,83 @@ main(int argc, char **argv) {
+@@ -356,6 +395,84 @@ main(int argc, char **argv) {
  	if (setuid(duid) < 0)
  		die("slock: setuid: %s\n", strerror(errno));
  
 +	/* Load picture */
 +	Imlib_Image buffer = imlib_load_image(get_background_path());
 +	imlib_context_set_image(buffer);
++	imlib_image_blur(blur_radius);
 +	int background_image_width = imlib_image_get_width();
 +	int background_image_height = imlib_image_get_height();
 +
