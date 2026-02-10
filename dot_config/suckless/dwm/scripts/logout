@@ -1,0 +1,10 @@
+#!/bin/bash
+
+choice=$(echo -e "Shutdown\nReboot\nLogout" | dmenu -fn 'IBM 3270:size=10' -nb '#111111' -nf '#ffffff' -sb '#4d0000' -sf '#ffffff' -p "Select an action:")
+
+case "$choice" in
+    "Shutdown") systemctl poweroff ;;
+    "Reboot") systemctl reboot ;;
+    "Logout") loginctl terminate-user $USER ;;
+esac
+

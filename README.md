@@ -7,25 +7,24 @@ An example of how this config looks
 
 This build uses:
 * dwm - window manager
-    * cfacts [ bottomstack, centermaster, deck ]
     * activemonitor
-    * actualfullscreen
     * alwayscenter
     * attachbottom
+    * cfacts [ bottomstack, centermaster, deck ]
     * fixborders
+    * focusfullscreen
     * movestack
-    * pertag_with_sel
+    * pertag
     * smart_border_color [ by me ]
     * statusallmons
     * swapmonitors
     * systray
     * xinerma_monitors_xorder
-
 * dwmblocks - same as slstatus but better
 * dmenu - application menu
 * j4-dmenu-desktop - wraper for dmenu
 * kitty - terminal emulator
-* slock - lockscreen
+* slock - lockscreen [ bg_scale_and_blur, current_time, slock-noxbell ]
 * mpv - media player
 * picom - compositor
 * feh - wallpaper

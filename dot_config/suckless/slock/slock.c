@@ -5,6 +5,7 @@
 #endif
 
 #include <ctype.h>
+#include <cairo/cairo-xlib.h>
 #include <errno.h>
 #include <grp.h>
 #include <pwd.h>
@@ -20,6 +21,8 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <Imlib2.h>
+#include <pthread.h>
+#include <time.h>
 
 #include "arg.h"
 #include "util.h"
@@ -46,6 +49,15 @@ struct xrandr {
 	int evbase;
 	int errbase;
 };
+
+struct displayData{
+	struct lock **locks;
+	Display* dpy;
+	int nscreens;
+	cairo_t **crs;
+	cairo_surface_t **surfaces;
+};
+static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 #include "config.h"
 
@@ -135,8 +147,45 @@ gethash(void)
 }
 
 static void
+refresh(Display *dpy, Window win , int screen, struct tm time, cairo_t* cr, cairo_surface_t* sfc)
+{/*Function that displays given time on the given screen*/
+	static char tm[64]="";
+	int xpos,ypos;
+	xpos = text_x;
+	ypos = text_y + textsize;
+	// xpos = DisplayWidth(dpy, screen)  / text_x; // for when the time is one per screen
+	// ypos = DisplayHeight(dpy, screen) / text_y;
+	sprintf(tm, "%04d.%02d.%02d %02d:%02d", time.tm_year + 1900, time.tm_mon + 1, time.tm_mday, time.tm_hour, time.tm_min);
+	XClearWindow(dpy, win);
+	cairo_set_source_rgb(cr, textcolorred, textcolorgreen, textcolorblue);
+	cairo_select_font_face(cr, textfamily, CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
+	cairo_set_font_size(cr, textsize);
+	cairo_move_to(cr, xpos, ypos);
+	cairo_show_text(cr, tm);
+	cairo_surface_flush(sfc);
+	XFlush(dpy);
+}
+static void*
+displayTime(void* input)
+{ /*Thread that keeps track of time and refreshes it every 5 seconds */
+	struct displayData* displayData=(struct displayData*)input;
+	while (1){
+		pthread_mutex_lock(&mutex); /*Mutex to prevent interference with refreshing screen while typing password*/
+		time_t rawtime;
+		time(&rawtime);
+		struct tm tm = *localtime(&rawtime);
+		for (int k=0;k<displayData->nscreens;k++){
+			refresh(displayData->dpy, displayData->locks[k]->win, displayData->locks[k]->screen, tm,displayData->crs[k],displayData->surfaces[k]);
+		}
+		pthread_mutex_unlock(&mutex);
+		sleep(5);
+	}
+	return NULL;
+}
+
+static void
 readpw(Display *dpy, struct xrandr *rr, struct lock **locks, int nscreens,
-       const char *hash)
+       const char *hash,cairo_t **crs,cairo_surface_t **surfaces)
 {
 	XRRScreenChangeNotifyEvent *rre;
 	char buf[32], passwd[256], *inputhash;
@@ -200,13 +249,19 @@ readpw(Display *dpy, struct xrandr *rr, struct lock **locks, int nscreens,
 			}
 			color = len ? INPUT : ((failure || failonclear) ? FAILED : INIT);
 			if (running && oldc != color) {
+				pthread_mutex_lock(&mutex); /*Stop the time refresh thread from interfering*/
 				for (screen = 0; screen < nscreens; screen++) {
 					if (locks[screen]->bgmap)
 						XSetWindowBackgroundPixmap(dpy, locks[screen]->win, locks[screen]->bgmap);
 					else
 						XSetWindowBackground(dpy, locks[screen]->win, locks[screen]->colors[0]);
 					XClearWindow(dpy, locks[screen]->win);
+					time_t rawtime;
+					time(&rawtime);
+					refresh(dpy, locks[screen]->win,locks[screen]->screen, *localtime(&rawtime),crs[screen],surfaces[screen]);
+					/*Redraw the time after screen cleared*/
 				}
+				pthread_mutex_unlock(&mutex);
 				oldc = color;
 			}
 		} else if (rr->active && ev.type == rr->evbase + RRScreenChangeNotify) {
@@ -224,6 +279,7 @@ readpw(Display *dpy, struct xrandr *rr, struct lock **locks, int nscreens,
 					break;
 				}
 			}
+			pthread_mutex_unlock(&mutex);
 		} else {
 			for (screen = 0; screen < nscreens; screen++)
 				XRaiseWindow(dpy, locks[screen]->win);
@@ -385,6 +441,7 @@ main(int argc, char **argv) {
 	if (!crypt("", hash))
 		die("slock: crypt: %s\n", strerror(errno));
 
+	XInitThreads();
 	if (!(dpy = XOpenDisplay(NULL)))
 		die("slock: cannot open display\n");
 
@@ -505,7 +562,33 @@ main(int argc, char **argv) {
 	}
 
 	/* everything is now blank. Wait for the correct password */
-	readpw(dpy, &rr, locks, nscreens, hash);
+	pthread_t thredid;
+	/* Create Cairo drawables upon which the time will be shown. */
+	struct displayData displayData;
+	cairo_surface_t **surfaces;
+	cairo_t **crs;
+	if (!(surfaces=calloc(nscreens, sizeof(cairo_surface_t*)))){
+		die("Out of memory");
+	}
+	if (!(crs=calloc(nscreens, sizeof(cairo_t*)))){
+		die("Out of memory");
+	}
+	for (int k=0;k<nscreens;k++){
+		Drawable win=locks[k]->win;
+		int screen=locks[k]->screen;
+		XMapWindow(dpy, win);
+		surfaces[k]=cairo_xlib_surface_create(dpy, win, DefaultVisual(dpy, screen),DisplayWidth(dpy, screen) , DisplayHeight(dpy, screen));
+		crs[k]=cairo_create(surfaces[k]);
+	}
+	displayData.dpy=dpy;
+	displayData.locks=locks;
+	displayData.nscreens=nscreens;
+	displayData.crs=crs;
+	displayData.surfaces=surfaces;
+	/*Start the thread that redraws time every 5 seconds*/
+	pthread_create(&thredid, NULL, displayTime, &displayData);
+	/*Wait for the password*/
+	readpw(dpy, &rr, locks, nscreens, hash,crs,surfaces);
 
 	return 0;
 }

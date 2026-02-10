@@ -1,6 +1,0 @@
-#!/bin/bash
-layout_info=$(setxkbmap -query)
-layout=$(echo "$layout_info" | grep layout | awk '{print $2}')
-variant=$(echo "$layout_info" | grep variant | awk '{print $2}')
-
-echo "$layout"

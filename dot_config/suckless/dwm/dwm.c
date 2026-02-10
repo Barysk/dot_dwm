@@ -242,7 +242,7 @@ static void tagmon(const Arg *arg);
 static void tile(Monitor *m);
 static void togglebar(const Arg *arg);
 static void togglefloating(const Arg *arg);
-static void togglefullscr(const Arg *arg);
+static void togglefullscreen();
 static void toggletag(const Arg *arg);
 static void toggleview(const Arg *arg);
 static void unfocus(Client *c, int setfocus);
@@ -270,10 +270,10 @@ static int xerrordummy(Display *dpy, XErrorEvent *ee);
 static int xerrorstart(Display *dpy, XErrorEvent *ee);
 static void zoom(const Arg *arg);
 static void swapmon(const Arg *arg);
-static void centeredmaster(Monitor *m);
-static void centeredfloatingmaster(Monitor *m);
 static void bstack(Monitor *m);
 static void bstackhoriz(Monitor *m);
+static void centeredmaster(Monitor *m);
+static void centeredfloatingmaster(Monitor *m);
 
 /* variables */
 static Systray *systray = NULL;
@@ -321,7 +321,6 @@ struct Pertag {
 	unsigned int sellts[LENGTH(tags) + 1]; /* selected layouts */
 	const Layout *ltidxs[LENGTH(tags) + 1][2]; /* matrix of tags and layouts indexes  */
 	int showbars[LENGTH(tags) + 1]; /* display bar for the current tag */
-	Client *sel[LENGTH(tags) + 1]; /* selected client */
 };
 
 /* compile-time check if all tags fit into an unsigned int bit array. */
@@ -826,7 +825,6 @@ deck(Monitor *m) {
 			resize(c, m->wx + mw, m->wy, m->ww - mw - (2*c->bw), m->wh - (2*c->bw), False);
 }
 
-
 void
 detach(Client *c)
 {
@@ -991,8 +989,13 @@ focus(Client *c)
 		XSetInputFocus(dpy, root, RevertToPointerRoot, CurrentTime);
 		XDeleteProperty(dpy, root, netatom[NetActiveWindow]);
 	}
-	selmon->sel = c;
-	selmon->pertag->sel[selmon->pertag->curtag] = c;
+	if(selmon->sel && selmon->sel->isfullscreen){
+		togglefullscreen();
+		selmon->sel = c;
+		togglefullscreen();
+	}else{
+		selmon->sel = c;
+	}
 	drawbars();
 }
 
@@ -1050,7 +1053,7 @@ Atom
 getatomprop(Client *c, Atom prop)
 {
 	int di;
-	unsigned long dl;
+	unsigned long nitems, dl;
 	unsigned char *p = NULL;
 	Atom da, atom = None;
 
@@ -1061,8 +1064,9 @@ getatomprop(Client *c, Atom prop)
 		req = xatom[XembedInfo];
 
 	if (XGetWindowProperty(dpy, c->win, prop, 0L, sizeof atom, False, req,
-		&da, &di, &dl, &dl, &p) == Success && p) {
-		if (da == xatom[XembedInfo] && dl == 2)
+		&da, &di, &nitems, &dl, &p) == Success && p) {
+		atom = *(Atom *)p;
+		if (da == xatom[XembedInfo] && nitems == 2)
 			atom = ((Atom *)p)[1];
 		XFree(p);
 	}
@@ -2050,10 +2054,11 @@ togglefloating(const Arg *arg)
 }
 
 void
-togglefullscr(const Arg *arg)
+togglefullscreen()
 {
-  if(selmon->sel)
-    setfullscreen(selmon->sel, !selmon->sel->isfullscreen);
+	if (selmon->sel){
+		setfullscreen(selmon->sel, !selmon->sel->isfullscreen);
+	}
 }
 
 void
@@ -2123,13 +2128,9 @@ unfocus(Client *c, int setfocus)
 void
 unmanage(Client *c, int destroyed)
 {
-	int i;
 	Monitor *m = c->mon;
 	XWindowChanges wc;
-
-	for (i = 0; i < LENGTH(tags) + 1; i++)
-		if (c->mon->pertag->sel[i] == c)
-			c->mon->pertag->sel[i] = NULL;
+	int fullscreen = (selmon->sel == c && selmon->sel->isfullscreen)?1:0;
 
 	detach(c);
 	detachstack(c);
@@ -2147,6 +2148,9 @@ unmanage(Client *c, int destroyed)
 	}
 	free(c);
 	focus(NULL);
+	if(fullscreen){
+		togglefullscreen();
+	}
 	updateclientlist();
 	arrange(m);
 }
@@ -2382,9 +2386,10 @@ updatestatus(void)
 	Monitor* m;
 	if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext)))
 		strcpy(stext, "dwm-"VERSION);
+	drawbar(selmon);
+	updatesystray();
 	for(m = mons; m; m = m->next)
 		drawbar(m);
-	updatesystray();
 }
 
 
@@ -2579,7 +2584,7 @@ view(const Arg *arg)
 	if (selmon->showbar != selmon->pertag->showbars[selmon->pertag->curtag])
 		togglebar(NULL);
 
-	focus(selmon->pertag->sel[selmon->pertag->curtag]);
+	focus(NULL);
 	arrange(selmon);
 }
 

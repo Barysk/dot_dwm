@@ -1,0 +1,17 @@
+#!/bin/bash
+
+battery="$(cat /sys/class/power_supply/BAT0/capacity)"
+bat_status="$(cat /sys/class/power_supply/BAT0/status)"
+suffix=""
+
+if [ "$bat_status" == "Charging" ]; then
+	suffix="充電中"
+elif [ "$battery" -lt 20 ]; then
+	suffix="危険"
+elif [ "$battery" -lt 40 ]; then
+	suffix="注意"
+elif [ "$battery" -lt 60 ]; then
+	suffix="残量少"
+fi
+
+echo "バッテリー${suffix} ${battery}"
