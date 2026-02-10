@@ -12,7 +12,7 @@ This build uses:
     * attachbottom
     * cfacts [ bottomstack, centermaster, deck ]
     * fixborders
-    * focusfullscreen
+    * fullscreen
     * movestack
     * pertag
     * smart_border_color [ by me ]
