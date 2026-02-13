@@ -3,6 +3,7 @@
 // DWM 6.8
 
 #define FONT          "serif:size=12"
+#define MORE_FONTS    "Noto Serif CJK JP, Noto Serif"
 #define COL_BLACK     "#000000"
 #define COL_WHITE     "#ffffff"
 #define COL_ACCENT    "#646464"
@@ -18,7 +19,7 @@ static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display 
 static const int showsystray        = 1;        /* 0 means no systray */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 0;        /* 0 means bottom bar */
-static const char *fonts[]          = { FONT };
+static const char *fonts[]          = { MORE_FONTS, FONT };
 static const char dmenufont[]       = FONT;
 
 static const char *colors[][3]      = {
@@ -44,9 +45,9 @@ static const Rule rules[] = {
 /* layout(s) */
 static const float mfact        = 0.60; /* factor of master area size [0.05..0.95] */
 static const int nmaster        = 1;    /* number of clients in master area */
-static const int resizehints    = 1;  /* 1 means respect size hints in tiled resizals */
-static const int lockfullscreen = 0;  /* 1 will force focus on the fullscreen window */
-static const int refreshrate    = 60; /* refresh rate (per second) for client move/resize */
+static const int resizehints    = 1;    /* 1 means respect size hints in tiled resizals */
+static const int lockfullscreen = 1;    /* 1 will force focus on the fullscreen window */
+static const int refreshrate    = 60;   /* refresh rate (per second) for client move/resize */
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
@@ -138,6 +139,7 @@ static const Key keys[] = {
 	{ MODKEY|ControlMask,           XK_k,        setlayout,      {.v = &layouts[4]} },
 	{ MODKEY|ControlMask,           XK_d,        setlayout,      {.v = &layouts[5]} },
 	{ MODKEY,                       XK_f,        fullscreen,     {0} },
+	{ MODKEY|ShiftMask,             XK_f,        togglefullscr,  {0} },
 	// 5
 	{ MODKEY,                       XK_space,    spawn,          {.v = multimedia_pause  } },
 	{ MODKEY,                       XK_Down,     spawn,          {.v = multimedia_pause  } },
@@ -154,7 +156,7 @@ static const Key keys[] = {
 	{ 0,                            0x1008ffb2,  spawn,          {.v = toggle_mic } },
 	{ Mod1Mask,                     XK_Shift_L,  spawn,          {.v = change_layout } },
 	// 14
-	{ MODKEY|ShiftMask,             XK_f,        togglefloating, {0} },
+	{ MODKEY|ShiftMask,             XK_space,    togglefloating, {0} },
 	{ MODKEY,                       XK_percent,  view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_percent,  tag,            {.ui = ~0 } },
 	{ MODKEY,                       XK_comma,    focusmon,       {.i = -1 } },

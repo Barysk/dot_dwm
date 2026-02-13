@@ -14,7 +14,7 @@ alias grep='grep --color=auto'
 alias cal='cal -m'
 alias nv='nvim .'
 alias whatfonts='fc-list : family | sort | uniq'
-alias pentablet="$HOME/.config/suckless/dwm/dwm_scripts/pentablet"
+alias pentablet="$HOME/.config/suckless/dwm/scripts/pentablet"
 
 alias archwiki="$BROWSER /usr/share/doc/arch-wiki/html/en/Main_page.html"
 

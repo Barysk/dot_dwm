@@ -8,6 +8,7 @@ An example of how this config looks
 This build uses:
 * dwm - window manager
     * activemonitor
+    * actualfullscreen
     * alwayscenter
     * attachbottom
     * cfacts [ bottomstack, centermaster, deck ]
