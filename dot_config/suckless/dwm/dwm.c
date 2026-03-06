@@ -2697,33 +2697,79 @@ zoom(const Arg *arg)
 void
 swapmon(const Arg *arg)
 {
-    if (mons->next == NULL)
-        return;
+	if (!mons || !mons->next)
+		return;
 
-    Monitor *m1 = mons;
-    Monitor *m2 = mons->next;
+	/* swap currently selected with the next monitor */
+	Monitor *m1 = selmon;
+	Monitor *m2 = selmon->next ? selmon->next : mons;
 
-    unsigned int tmp = m1->tagset[m1->seltags];
-    m1->tagset[m1->seltags] = m2->tagset[m2->seltags];
-    m2->tagset[m2->seltags] = tmp;
+	/* swap tagsets */
+	for (int i = 0; i < 2; i++) {
+		unsigned int tmp = m1->tagset[i];
+		m1->tagset[i] = m2->tagset[i];
+		m2->tagset[i] = tmp;
+	}
 
-    Client *c;
-    for (c = m1->clients; c; c = c->next)
-        c->mon = m2;
-    for (c = m2->clients; c; c = c->next)
-        c->mon = m1;
+	/* swap selected tagset index */
+	int tmpi = m1->seltags;
+	m1->seltags = m2->seltags;
+	m2->seltags = tmpi;
 
-    Client *tmp_clients = m1->clients;
-    m1->clients = m2->clients;
-    m2->clients = tmp_clients;
+	/* swap layout selection */
+	tmpi = m1->sellt;
+	m1->sellt = m2->sellt;
+	m2->sellt = tmpi;
 
-    Client *tmp_stack = m1->stack;
-    m1->stack = m2->stack;
-    m2->stack = tmp_stack;
+	const Layout *tmpl = m1->lt[0];
+	m1->lt[0] = m2->lt[0];
+	m2->lt[0] = tmpl;
 
-    focus(NULL);
-    arrange(m1);
-    arrange(m2);
+	tmpl = m1->lt[1];
+	m1->lt[1] = m2->lt[1];
+	m2->lt[1] = tmpl;
+
+	float tmpf = m1->mfact;
+	m1->mfact = m2->mfact;
+	m2->mfact = tmpf;
+
+	tmpi = m1->nmaster;
+	m1->nmaster = m2->nmaster;
+	m2->nmaster = tmpi;
+
+	/* swap pertag */
+	Pertag *ptmp = m1->pertag;
+	m1->pertag = m2->pertag;
+	m2->pertag = ptmp;
+
+	/* swap clients */
+	Client *ctmp = m1->clients;
+	m1->clients = m2->clients;
+	m2->clients = ctmp;
+
+	/* swap stacks */
+	ctmp = m1->stack;
+	m1->stack = m2->stack;
+	m2->stack = ctmp;
+
+	/* swap selected client */
+	ctmp = m1->sel;
+	m1->sel = m2->sel;
+	m2->sel = ctmp;
+
+	/* update client monitor pointer */
+	Client *c;
+	for (c = m1->clients; c; c = c->next)
+		c->mon = m1;
+
+	for (c = m2->clients; c; c = c->next)
+		c->mon = m2;
+
+	focus(NULL);
+	arrange(m1);
+	arrange(m2);
+	drawbar(m1);
+	drawbar(m2);
 }
 
 int

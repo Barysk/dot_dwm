@@ -22,4 +22,4 @@ static const double textcolorgreen = 255;
 /* Background image */
 static const char* lockscreen_path = "WALLPAPER_PATH"; // env variable that slock is going to look for
 static const int image_mode = 1;  // 1 to fill, 0 to fit
-static const int blur_radius = 8; // Define blur radius
+static const int blur_radius = 4; // Define blur radius
