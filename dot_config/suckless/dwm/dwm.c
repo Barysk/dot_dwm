@@ -190,6 +190,7 @@ static void drawbar(Monitor *m);
 static void drawbars(void);
 static void enternotify(XEvent *e);
 static void expose(XEvent *e);
+static Client *findbefore(Client *c);
 static void focus(Client *c);
 static void focusin(XEvent *e);
 static void focusmon(const Arg *arg);
@@ -270,13 +271,14 @@ static int xerror(Display *dpy, XErrorEvent *ee);
 static int xerrordummy(Display *dpy, XErrorEvent *ee);
 static int xerrorstart(Display *dpy, XErrorEvent *ee);
 static void zoom(const Arg *arg);
-static void swapmon(const Arg *arg);
+static void rotatemon(const Arg *arg);
 static void bstack(Monitor *m);
 static void bstackhoriz(Monitor *m);
 static void centeredmaster(Monitor *m);
 static void centeredfloatingmaster(Monitor *m);
 
 /* variables */
+static Client *prevzoom = NULL;
 static Systray *systray = NULL;
 static const char broken[] = "broken";
 static char stext[256];
@@ -2682,94 +2684,150 @@ systraytomon(Monitor *m) {
 	return t;
 }
 
+Client *
+findbefore(Client *c)
+{
+	Client *tmp;
+	if (c == selmon->clients)
+		return NULL;
+	for (tmp = selmon->clients; tmp && tmp->next != c; tmp = tmp->next);
+	return tmp;
+}
+
 void
 zoom(const Arg *arg)
 {
 	Client *c = selmon->sel;
+	Client *at = NULL, *cold, *cprevious = NULL;
 
 	if (!selmon->lt[selmon->sellt]->arrange || !c || c->isfloating)
 		return;
-	if (c == nexttiled(selmon->clients) && !(c = nexttiled(c->next)))
-		return;
-	pop(c);
+	if (c == nexttiled(selmon->clients)) {
+		at = findbefore(prevzoom);
+		if (at)
+			cprevious = nexttiled(at->next);
+		if (!cprevious || cprevious != prevzoom) {
+			prevzoom = NULL;
+			if (!c || !(c = nexttiled(c->next)))
+				return;
+		} else
+			c = cprevious;
+	}
+	cold = nexttiled(selmon->clients);
+	if (c != cold && !at)
+		at = findbefore(c);
+	detach(c);
+	attach(c);
+	/* swap windows instead of pushing the previous one down */
+	if (c != cold && at) {
+		prevzoom = cold;
+		if (cold && at != cold) {
+			detach(cold);
+			cold->next = at->next;
+			at->next = cold;
+		}
+	}
+	focus(c);
+	arrange(c->mon);
 }
 
 void
-swapmon(const Arg *arg)
+rotatemon(const Arg *arg)
 {
 	if (!mons || !mons->next)
 		return;
 
-	/* swap currently selected with the next monitor */
-	Monitor *m1 = selmon;
-	Monitor *m2 = selmon->next ? selmon->next : mons;
+	int dir = arg->i > 0 ? 1 : -1;
 
-	/* swap tagsets */
-	for (int i = 0; i < 2; i++) {
-		unsigned int tmp = m1->tagset[i];
-		m1->tagset[i] = m2->tagset[i];
-		m2->tagset[i] = tmp;
+	int countmons = 0;
+	for (Monitor *m = mons; m; m = m->next)
+		countmons++;
+
+	Monitor *marr[countmons];
+	int i = 0;
+	for (Monitor *m = mons; m; m = m->next)
+		marr[i++] = m;
+
+	int from = (dir > 0) ? countmons - 1 : 0;
+	int to   = (dir > 0) ?             0 : countmons - 1;
+
+	unsigned int b_tagset[2];
+	memcpy(b_tagset, marr[from]->tagset, sizeof b_tagset);
+
+	int b_seltags  = marr[from]->seltags;
+	int b_sellt    = marr[from]->sellt;
+	float b_mfact  = marr[from]->mfact;
+	int b_nmaster  = marr[from]->nmaster;
+
+	const Layout *b_lt0 = marr[from]->lt[0];
+	const Layout *b_lt1 = marr[from]->lt[1];
+	Pertag *b_pertag     = marr[from]->pertag;
+
+	Client *b_clients = marr[from]->clients;
+	Client *b_stack   = marr[from]->stack;
+	Client *b_sel     = marr[from]->sel;
+
+	for (int idx = from; ; ) {
+		int nxt = idx - dir;
+		if (nxt < 0) nxt = countmons - 1;
+		if (nxt >= countmons) nxt = 0;
+
+		if (nxt == from) break;
+
+		Monitor *dst = marr[idx];
+		Monitor *src = marr[nxt];
+
+		memcpy(dst->tagset, src->tagset, sizeof dst->tagset);
+		dst->seltags = src->seltags;
+		dst->sellt = src->sellt;
+		dst->mfact = src->mfact;
+		dst->nmaster = src->nmaster;
+		dst->lt[0] = src->lt[0];
+		dst->lt[1] = src->lt[1];
+		dst->pertag = src->pertag;
+
+		dst->clients = src->clients;
+		dst->stack   = src->stack;
+		dst->sel     = src->sel;
+
+		idx = nxt;
 	}
 
-	/* swap selected tagset index */
-	int tmpi = m1->seltags;
-	m1->seltags = m2->seltags;
-	m2->seltags = tmpi;
+	Monitor *dstmon = marr[to];
 
-	/* swap layout selection */
-	tmpi = m1->sellt;
-	m1->sellt = m2->sellt;
-	m2->sellt = tmpi;
+	memcpy(dstmon->tagset, b_tagset, sizeof b_tagset);
+	dstmon->seltags = b_seltags;
+	dstmon->sellt = b_sellt;
+	dstmon->mfact = b_mfact;
+	dstmon->nmaster = b_nmaster;
 
-	const Layout *tmpl = m1->lt[0];
-	m1->lt[0] = m2->lt[0];
-	m2->lt[0] = tmpl;
+	dstmon->lt[0] = b_lt0;
+	dstmon->lt[1] = b_lt1;
 
-	tmpl = m1->lt[1];
-	m1->lt[1] = m2->lt[1];
-	m2->lt[1] = tmpl;
+	dstmon->pertag = b_pertag;
 
-	float tmpf = m1->mfact;
-	m1->mfact = m2->mfact;
-	m2->mfact = tmpf;
+	dstmon->clients = b_clients;
+	dstmon->stack = b_stack;
+	dstmon->sel = b_sel;
 
-	tmpi = m1->nmaster;
-	m1->nmaster = m2->nmaster;
-	m2->nmaster = tmpi;
+	for (int j = 0; j < countmons; j++) {
+		Monitor *m = marr[j];
+		for (Client *c = m->clients; c; c = c->next)
+			c->mon = m;
+	}
 
-	/* swap pertag */
-	Pertag *ptmp = m1->pertag;
-	m1->pertag = m2->pertag;
-	m2->pertag = ptmp;
-
-	/* swap clients */
-	Client *ctmp = m1->clients;
-	m1->clients = m2->clients;
-	m2->clients = ctmp;
-
-	/* swap stacks */
-	ctmp = m1->stack;
-	m1->stack = m2->stack;
-	m2->stack = ctmp;
-
-	/* swap selected client */
-	ctmp = m1->sel;
-	m1->sel = m2->sel;
-	m2->sel = ctmp;
-
-	/* update client monitor pointer */
-	Client *c;
-	for (c = m1->clients; c; c = c->next)
-		c->mon = m1;
-
-	for (c = m2->clients; c; c = c->next)
-		c->mon = m2;
+	for (int j = 0; j < countmons; j++) {
+		Monitor *m = marr[j];
+		if (m != selmon && m->sel)
+			unfocus(m->sel, 0);
+	}
 
 	focus(NULL);
-	arrange(m1);
-	arrange(m2);
-	drawbar(m1);
-	drawbar(m2);
+
+	for (int j = 0; j < countmons; j++) {
+		arrange(marr[j]);
+		drawbar(marr[j]);
+	}
 }
 
 int

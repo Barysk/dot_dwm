@@ -6,8 +6,8 @@
 #define MORE_FONTS    "Noto Serif CJK JP, Noto Serif"
 #define COL_BLACK     "#000000"
 #define COL_WHITE     "#ffffff"
-#define COL_ACCENT    "#646464"
-#define COL_SECONDARY "#323232"
+#define COL_ACCENT    "#767676"
+#define COL_SECONDARY "#484848"
 
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
@@ -140,7 +140,7 @@ static const Key keys[] = {
 	{ MODKEY|ControlMask,           XK_d,        setlayout,      {.v = &layouts[5]} },
 	{ MODKEY,                       XK_f,        fullscreen,     {0} },
 	{ MODKEY|ShiftMask,             XK_f,        togglefullscr,  {0} },
-	// 5
+	// 8
 	{ MODKEY,                       XK_space,    spawn,          {.v = multimedia_pause  } },
 	{ MODKEY,                       XK_Down,     spawn,          {.v = multimedia_pause  } },
 	{ MODKEY,                       XK_Right,    spawn,          {.v = multimedia_next  } },
@@ -163,7 +163,8 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_period,   focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,    tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period,   tagmon,         {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_Tab,      swapmon,        {0} },
+	{ MODKEY|ShiftMask,             XK_Tab,      rotatemon,      {.i = +1} },
+	{ MODKEY|ControlMask,           XK_Tab,      rotatemon,      {.i = -1} },
 	// 9
 	TAGKEYS(                        XK_plus,                     0)
 	TAGKEYS(                        XK_bracketleft,              1)
@@ -176,7 +177,7 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_bracketright,             8)
 	TAGKEYS(                        XK_asterisk,                 9)
 	{ MODKEY|ShiftMask,             XK_Escape,  quit,            {0} },
-	// 10
+	// 11
 };
 
 /* button definitions */
